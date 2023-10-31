@@ -14,4 +14,7 @@ object Dimens {
     val Margin8dp = 8.dp
     val Margin16dp = 16.dp
     val Margin24dp = 24.dp
+
+    // View Dimensions
+    val ButtonCornerRadius = 8.dp
 }
