@@ -48,6 +48,6 @@ class MainViewModel @Inject constructor(
 
             // Setting as 'false' after execution of code to exit out of SplashScreen
             redirectFlagState = false
-        }
+        }.launchIn(viewModelScope)
     }
 }
