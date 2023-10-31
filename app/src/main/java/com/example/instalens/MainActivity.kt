@@ -11,12 +11,20 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.instalens.presentation.onboarding.OnBoardingScreen
-import com.example.instalens.presentation.onboarding.viemodel.OnBoardingViewModel
+import com.example.instalens.presentation.onboarding.viewmodel.OnBoardingViewModel
 import com.example.instalens.ui.theme.InstaLensTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    companion object {
+        private val TAG: String? = MainActivity::class.simpleName
+    }
+
+    @Inject
+    private lateinit var viewModel: OnBoardingViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -27,7 +35,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             InstaLensTheme {
                 Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-                    val viewModel: OnBoardingViewModel = hiltViewModel()
+                    viewModel = hiltViewModel()
                     OnBoardingScreen(
                         event = viewModel::onEvent
                     )

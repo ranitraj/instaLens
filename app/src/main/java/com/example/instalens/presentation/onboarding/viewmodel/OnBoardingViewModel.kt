@@ -1,4 +1,4 @@
-package com.example.instalens.presentation.onboarding.viemodel
+package com.example.instalens.presentation.onboarding.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

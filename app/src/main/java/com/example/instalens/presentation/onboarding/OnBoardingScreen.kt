@@ -98,7 +98,7 @@ fun OnBoardingScreen(
                     text = buttonState.value[1],
                     onClick = {
                         pagerCoroutineScope.launch {
-                            if (pagerState.currentPage == pagesList.size) {
+                            if (pagerState.currentPage == (pagesList.size - 1)) {
                                 // At last page -> Writing config key to DataStore denoting OnBoarding Screens are seen
                                 event(OnBoardingEvent.WriteUserConfigToDataStore)
                             } else {
