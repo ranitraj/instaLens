@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Configuring Splash API for customizing Splash-Screen UI -->
+    <style name="App.SplashScreen.Theme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/gray_50</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@color/gray_900</item>
+    </style>
+</resources>
