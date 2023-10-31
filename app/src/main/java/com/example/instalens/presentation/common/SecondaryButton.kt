@@ -1,8 +1,8 @@
 package com.example.instalens.presentation.common
 
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -13,7 +13,7 @@ fun SecondaryButton(
     text: String,
     onClick: () -> Unit
 ) {
-    Button(onClick = onClick) {
+    TextButton(onClick = onClick) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
