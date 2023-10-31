@@ -52,6 +52,7 @@ android {
 dependencies {
     // Dependency Versions
     val splashScreenVersion = "1.0.1"
+    val dataStoreVersion = "1.0.0"
     val tfLiteVersion = "0.4.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -65,6 +66,9 @@ dependencies {
 
     // Splash-Screen Dependency
     implementation("androidx.core:core-splashscreen:$splashScreenVersion")
+
+    // Preferences DataStore Dependency
+    implementation("androidx.datastore:datastore-preferences:$dataStoreVersion")
 
     // Tensorflow-Lite Dependencies
     implementation("org.tensorflow:tensorflow-lite-task-vision:$tfLiteVersion")
