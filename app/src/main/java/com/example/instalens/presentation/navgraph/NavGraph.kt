@@ -2,6 +2,7 @@ package com.example.instalens.presentation.navgraph
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,6 +36,18 @@ fun NavGraph(
                 OnBoardingScreen(
                     event = viewModel::onEvent
                 )
+            }
+        }
+
+        // Home Screen Navigation
+        navigation(
+            route = Route.HomeNavigation.route,
+            startDestination = Route.HomeScreen.route
+        ) {
+            composable(
+                route = Route.HomeScreen.route
+            ) {
+                // TODO:
             }
         }
     }

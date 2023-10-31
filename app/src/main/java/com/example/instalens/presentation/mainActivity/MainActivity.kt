@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // Initializing Splash Screen API & continuing to show until splashCondition flag value is obtained
+        // Initializing Splash-Screen API & continue showing via 'setKeepOnScreenCondition' until condition satisfies
         installSplashScreen().apply { 
             setKeepOnScreenCondition{
                 // Will exit once 'false' is obtained for redirectFlagState
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     val startDestination = viewModel.startDestination
                     Log.d(TAG, "setContent() called with startDestination = $startDestination ")
 
-                    //NavGraph(startDestination = startDestination)
+                    NavGraph(startDestination = startDestination)
                 }
             }
         }

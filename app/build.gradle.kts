@@ -60,6 +60,7 @@ dependencies {
     // Dependency Versions
     val splashScreenVersion = "1.0.1"
     val dataStoreVersion = "1.0.0"
+    val navComposeVersion = "2.6.0"
     val daggerHiltVersion = "2.45"
     val tfLiteVersion = "0.4.0"
 
@@ -77,6 +78,9 @@ dependencies {
 
     // Preferences DataStore Dependency
     implementation("androidx.datastore:datastore-preferences:$dataStoreVersion")
+
+    //Compose Navigation
+    implementation("androidx.navigation:navigation-compose:$navComposeVersion")
 
     // Dagger Hilt Dependencies
     implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
