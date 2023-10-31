@@ -1,6 +1,10 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
+    kotlin("kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -47,12 +51,18 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    // Allow references to generated code for Dagger-Hilt
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
     // Dependency Versions
     val splashScreenVersion = "1.0.1"
     val dataStoreVersion = "1.0.0"
+    val daggerHiltVersion = "2.44"
     val tfLiteVersion = "0.4.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -69,6 +79,10 @@ dependencies {
 
     // Preferences DataStore Dependency
     implementation("androidx.datastore:datastore-preferences:$dataStoreVersion")
+
+    // Dagger Hilt Dependencies
+    implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
 
     // Tensorflow-Lite Dependencies
     implementation("org.tensorflow:tensorflow-lite-task-vision:$tfLiteVersion")
