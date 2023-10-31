@@ -11,6 +11,6 @@
     <color name="gray_900">#212121</color>
 
     <!-- Text Colors -->
-    <color name="text_title">#212121</color>
-    <color name="text_body">#616161</color>
+    <color name="text_title">#FFFFFF</color>
+    <color name="text_body">#E0E0E0</color>
 </resources>
