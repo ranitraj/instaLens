@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Insta Lens</string>
+
+    <!-- Image Content Descriptions -->
+    <string name="onboarding_image_description">Onboarding Page Thumbnail</string>
 </resources>
