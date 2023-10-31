@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalUserConfigManager {
     suspend fun writeUserConfig()
-    suspend fun readUserConfig(): Flow<Boolean>
+    fun readUserConfig(): Flow<Boolean>
 }

@@ -1,17 +1,17 @@
-package com.example.instalens
+package com.example.instalens.presentation.mainActivity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.instalens.presentation.onboarding.OnBoardingScreen
-import com.example.instalens.presentation.onboarding.viewmodel.OnBoardingViewModel
+import com.example.instalens.presentation.navgraph.NavGraph
 import com.example.instalens.ui.theme.InstaLensTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,18 +21,29 @@ class MainActivity : ComponentActivity() {
     companion object {
         private val TAG: String? = MainActivity::class.simpleName
     }
+    
+    private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // Initializing Splash Screen API
-        installSplashScreen()
+        // Initializing Splash Screen API & continuing to show until splashCondition flag value is obtained
+        installSplashScreen().apply { 
+            setKeepOnScreenCondition{
+                // Will exit once 'false' is obtained for redirectFlagState
+                viewModel.redirectFlagState
+            }
+        }
 
         setContent {
             InstaLensTheme {
                 Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
+                    // Retrieving startDestination from viewModel & redirecting to appropriate screen
+                    val startDestination = viewModel.startDestination
+                    Log.d(TAG, "setContent() called with startDestination = $startDestination ")
 
+                    //NavGraph(startDestination = startDestination)
                 }
             }
         }

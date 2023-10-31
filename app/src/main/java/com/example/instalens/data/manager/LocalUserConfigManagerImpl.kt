@@ -18,7 +18,7 @@ class LocalUserConfigManagerImpl(
         }
     }
 
-    override suspend fun readUserConfig(): Flow<Boolean> {
+    override fun readUserConfig(): Flow<Boolean> {
         // Using extension function obtain instance of 'userConfigDatastore' to read keys
         return context.datastore.data
             .map { preferences ->

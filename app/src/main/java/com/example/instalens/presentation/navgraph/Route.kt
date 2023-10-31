@@ -10,6 +10,7 @@ sealed class Route(
 ) {
     // Starting point
     object AppStartNavigation: Route(route = Routes.ROUTE_APP_START_NAVIGATION)
+    object HomeNavigation: Route(route = Routes.ROUTE_HOME_NAVIGATION)
 
     // Creating Route objects for each Screen
     object OnBoardingScreen: Route(route = Routes.ROUTE_ONBOARDING_SCREEN)

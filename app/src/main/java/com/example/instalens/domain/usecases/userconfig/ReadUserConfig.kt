@@ -7,7 +7,7 @@ class ReadUserConfig(
     private val userConfigManager: LocalUserConfigManager
 ) {
     // Adding 'operator' keyword to use instance of the class directly as a function without explicitly calling .invoke()
-    suspend operator fun invoke(): Flow<Boolean> {
+    operator fun invoke(): Flow<Boolean> {
         return userConfigManager.readUserConfig()
     }
 }
