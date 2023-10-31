@@ -16,10 +16,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.instalens.R
 import com.example.instalens.presentation.Dimens
 import com.example.instalens.presentation.onboarding.Page
+import com.example.instalens.ui.theme.InstaLensTheme
 
+/**
+ * Composable function implementing the Layout of the OnBoarding Page
+ */
 @Composable
 fun OnBoardingPage(
     page: Page,
