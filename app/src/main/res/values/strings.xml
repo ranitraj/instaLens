@@ -7,4 +7,5 @@
     <!-- On-Boarding -->
     <string name="button_next">Next</string>
     <string name="button_back">Back</string>
+    <string name="button_get_started">Get Started</string>
 </resources>

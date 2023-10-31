@@ -18,4 +18,5 @@ object Dimens {
     // View Dimensions
     val ButtonCornerRadius = 8.dp
     val IndicatorSize = 16.dp
+    val OnBoardingPageIndicatorWidth = 60.dp
 }
