@@ -17,4 +17,5 @@ object Dimens {
 
     // View Dimensions
     val ButtonCornerRadius = 8.dp
+    val IndicatorSize = 16.dp
 }
