@@ -30,7 +30,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnBoardingScreen() {
+fun OnBoardingScreen(
+    event: (OnBoardingEvent) -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         val pagerState: PagerState = rememberPagerState(initialPage = 0)
 
@@ -97,8 +99,8 @@ fun OnBoardingScreen() {
                     onClick = {
                         pagerCoroutineScope.launch {
                             if (pagerState.currentPage == pagesList.size) {
-                                // At the last page -> Navigate to Camera Screen
-                                // TODO
+                                // At last page -> Writing config key to DataStore denoting OnBoarding Screens are seen
+                                event(OnBoardingEvent.WriteUserConfigToDataStore)
                             } else {
                                 // Increment page count
                                 pagerState.animateScrollToPage(page = pagerState.currentPage + 1)

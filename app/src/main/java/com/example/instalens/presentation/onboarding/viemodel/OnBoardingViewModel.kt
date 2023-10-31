@@ -26,7 +26,7 @@ class OnBoardingViewModel @Inject constructor(
      */
     private fun writeUserConfig() {
         viewModelScope.launch {
-            userConfigUseCases.writeUserConfig
+            userConfigUseCases.writeUserConfig()
         }
     }
 }
