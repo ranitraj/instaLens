@@ -60,7 +60,7 @@ dependencies {
     // Dependency Versions
     val splashScreenVersion = "1.0.1"
     val dataStoreVersion = "1.0.0"
-    val daggerHiltVersion = "2.44"
+    val daggerHiltVersion = "2.45"
     val tfLiteVersion = "0.4.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -81,6 +81,7 @@ dependencies {
     // Dagger Hilt Dependencies
     implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // Tensorflow-Lite Dependencies
     implementation("org.tensorflow:tensorflow-lite-task-vision:$tfLiteVersion")

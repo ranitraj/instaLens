@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.instalens.presentation.onboarding.OnBoardingScreen
+import com.example.instalens.presentation.onboarding.viemodel.OnBoardingViewModel
 import com.example.instalens.ui.theme.InstaLensTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +27,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             InstaLensTheme {
                 Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-                    OnBoardingScreen()
+                    val viewModel: OnBoardingViewModel = hiltViewModel()
+                    OnBoardingScreen(
+                        event = viewModel::onEvent
+                    )
                 }
             }
         }
