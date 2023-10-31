@@ -13,7 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import com.example.instalens.R
-import com.example.instalens.presentation.Dimens
+import com.example.instalens.presentation.utils.Dimens
 
 @Composable
 fun OnBoardingPageIndicator(

@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.instalens.R
-import com.example.instalens.presentation.Dimens
+import com.example.instalens.presentation.utils.Dimens
 
 @Composable
 fun PrimaryButton(

@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.instalens.R
-import com.example.instalens.presentation.Dimens
+import com.example.instalens.presentation.utils.Dimens
 import com.example.instalens.presentation.common.PrimaryButton
 import com.example.instalens.presentation.common.SecondaryButton
 import com.example.instalens.presentation.onboarding.components.OnBoardingPage

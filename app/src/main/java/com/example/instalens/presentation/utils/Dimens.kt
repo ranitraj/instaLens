@@ -1,4 +1,4 @@
-package com.example.instalens.presentation
+package com.example.instalens.presentation.utils
 
 import androidx.compose.ui.unit.dp
 
