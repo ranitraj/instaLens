@@ -52,7 +52,7 @@ fun OnBoardingPage(
             modifier = Modifier.padding(horizontal = Dimens.Padding16dp),
             text = page.pageDescription,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
-            color = colorResource(id = R.color.text_title)
+            color = colorResource(id = R.color.text_body)
         )
     }
 }
@@ -64,9 +64,9 @@ fun OnBoardingPagePreview() {
     InstaLensTheme {
         OnBoardingPage(
             page = Page(
-                "Detect objects in Realtime using Insta Lens",
+                "Detect multiple objects in Realtime",
                 "Just point the camera at the object you want to detect and our AI model will let you know what it is",
-                R.drawable.thumbnail_page_1
+                R.drawable.thumbnail_page_2
             )
         )
     }

@@ -12,5 +12,5 @@
 
     <!-- Text Colors -->
     <color name="text_title">#FFFFFF</color>
-    <color name="text_body">#E0E0E0</color>
+    <color name="text_body">#BDBDBD</color>
 </resources>
