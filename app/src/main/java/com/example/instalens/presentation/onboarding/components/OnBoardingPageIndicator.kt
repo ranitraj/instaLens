@@ -21,7 +21,7 @@ fun OnBoardingPageIndicator(
     pageCount: Int,
     selectedPage: Int,
     selectedPageColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedPageColor: Color = colorResource(id = R.color.gray_50)
+    unselectedPageColor: Color = colorResource(id = R.color.page_indicator_unselected)
 ) {
     Row(
         modifier = modifier,

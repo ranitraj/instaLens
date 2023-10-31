@@ -22,9 +22,6 @@ class MainActivity : ComponentActivity() {
         private val TAG: String? = MainActivity::class.simpleName
     }
 
-    @Inject
-    private lateinit var viewModel: OnBoardingViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -35,10 +32,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             InstaLensTheme {
                 Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-                    viewModel = hiltViewModel()
-                    OnBoardingScreen(
-                        event = viewModel::onEvent
-                    )
+
                 }
             }
         }

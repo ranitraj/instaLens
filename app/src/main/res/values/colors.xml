@@ -13,4 +13,7 @@
     <!-- Text Colors -->
     <color name="text_title">#212121</color>
     <color name="text_body">#616161</color>
+
+    <!-- Page Indicator -->
+    <color name="page_indicator_unselected">#9E9E9E</color>
 </resources>
