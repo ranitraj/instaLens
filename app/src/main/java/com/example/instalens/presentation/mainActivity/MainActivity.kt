@@ -42,7 +42,10 @@ class MainActivity : ComponentActivity() {
                     val startDestination = viewModel.startDestination
                     Log.d(TAG, "setContent() called with startDestination = $startDestination ")
 
-                    NavGraph(startDestination = startDestination)
+                    NavGraph(
+                        context = applicationContext,
+                        startDestination = startDestination
+                    )
                 }
             }
         }

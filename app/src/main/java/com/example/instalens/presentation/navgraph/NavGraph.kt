@@ -1,5 +1,7 @@
 package com.example.instalens.presentation.navgraph
 
+import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -7,11 +9,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.example.instalens.presentation.home.HomeScreen
 import com.example.instalens.presentation.onboarding.OnBoardingScreen
 import com.example.instalens.presentation.onboarding.viewmodel.OnBoardingViewModel
 
 @Composable
 fun NavGraph(
+    context: Context,
     startDestination: String
 ) {
     val navController: NavHostController = rememberNavController()
@@ -46,7 +50,7 @@ fun NavGraph(
             composable(
                 route = Route.HomeScreen.route
             ) {
-                // TODO:
+                HomeScreen(context = context)
             }
         }
     }

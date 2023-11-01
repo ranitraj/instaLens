@@ -5,8 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,10 +27,7 @@ import com.example.instalens.presentation.utils.Dimens
  * comprising of an icon and a text field to print the count.
  */
 @Composable
-fun ObjectCounter(
-    objectCount: Int,
-    drawableResourceId: Int
-) {
+fun ObjectCounter(objectCount: Int) {
     Row(
         modifier = Modifier
             .padding(Dimens.Padding16dp)
@@ -45,7 +40,7 @@ fun ObjectCounter(
     ) {
         // Image to display Icon
         Image(
-            painter = painterResource(id = drawableResourceId),
+            painter = painterResource(id = R.drawable.ic_object_count),
             contentDescription = stringResource(id = R.string.object_icon_description),
             modifier = Modifier
                 .padding(Dimens.Padding16dp)
@@ -66,8 +61,5 @@ fun ObjectCounter(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun PreviewObjectCountDisplay() {
-    ObjectCounter(
-        objectCount = 5,
-        drawableResourceId = R.drawable.ic_object_count
-    )
+    ObjectCounter(objectCount = 5)
 }
