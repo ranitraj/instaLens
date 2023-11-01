@@ -14,7 +14,6 @@ import androidx.core.view.WindowCompat
 import com.example.instalens.presentation.navgraph.NavGraph
 import com.example.instalens.ui.theme.InstaLensTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
