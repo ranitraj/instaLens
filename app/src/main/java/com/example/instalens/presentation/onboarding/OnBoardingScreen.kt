@@ -24,6 +24,7 @@ import com.example.instalens.R
 import com.example.instalens.presentation.utils.Dimens
 import com.example.instalens.presentation.common.PrimaryButton
 import com.example.instalens.presentation.common.SecondaryButton
+import com.example.instalens.presentation.home.components.CameraPermissionRequest
 import com.example.instalens.presentation.onboarding.components.OnBoardingPage
 import com.example.instalens.presentation.onboarding.components.OnBoardingPageIndicator
 import kotlinx.coroutines.launch
@@ -34,7 +35,9 @@ fun OnBoardingScreen(
     event: (OnBoardingEvent) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        val pagerState: PagerState = rememberPagerState(initialPage = 0)
+        val pagerState: PagerState = rememberPagerState(initialPage = 0) {
+            pagesList.size
+        }
 
         // Initializing stringResources as it cannot be accessed inside 'derivedStateOf'
         val buttonNext = stringResource(id = R.string.button_next)
@@ -54,8 +57,8 @@ fun OnBoardingScreen(
         }
 
         // Initializing HorizontalPager component
-        HorizontalPager(state = pagerState, pageCount = pagesList.size) {
-            OnBoardingPage(page = pagesList[pagerState.currentPage])
+        HorizontalPager(state = pagerState) {pageIndex ->
+            OnBoardingPage(page = pagesList[pageIndex])
         }
         Spacer(modifier = Modifier.weight(1f))
 
