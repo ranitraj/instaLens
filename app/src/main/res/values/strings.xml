@@ -5,6 +5,7 @@
     <string name="onboarding_image_description">Onboarding Page Thumbnail</string>
     <string name="object_icon_description">Object Counter Icon</string>
     <string name="capture_button_description">Capture Image Button</string>
+    <string name="rotate_camera_button_description">Rotate Camera Button</string>
 
     <!-- On-Boarding -->
     <string name="button_next">Next</string>
