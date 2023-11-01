@@ -1,9 +1,10 @@
-package com.example.instalens.data.manager
+package com.example.instalens.data.manager.datastore
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import com.example.instalens.data.extensions.datastore
-import com.example.instalens.domain.manager.LocalUserConfigManager
+import com.example.instalens.data.utils.PreferenceDatastoreKeys
+import com.example.instalens.domain.manager.datastore.LocalUserConfigManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

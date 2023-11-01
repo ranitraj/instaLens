@@ -1,8 +1,8 @@
 package com.example.instalens.di
 
 import android.app.Application
-import com.example.instalens.data.manager.LocalUserConfigManagerImpl
-import com.example.instalens.domain.manager.LocalUserConfigManager
+import com.example.instalens.data.manager.datastore.LocalUserConfigManagerImpl
+import com.example.instalens.domain.manager.datastore.LocalUserConfigManager
 import com.example.instalens.domain.usecases.userconfig.ReadUserConfig
 import com.example.instalens.domain.usecases.userconfig.UserConfigUseCases
 import com.example.instalens.domain.usecases.userconfig.WriteUserConfig

@@ -1,6 +1,6 @@
 package com.example.instalens.domain.usecases.userconfig
 
-import com.example.instalens.domain.manager.LocalUserConfigManager
+import com.example.instalens.domain.manager.datastore.LocalUserConfigManager
 import kotlinx.coroutines.flow.Flow
 
 class ReadUserConfig(

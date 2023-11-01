@@ -1,4 +1,4 @@
-package com.example.instalens.domain.manager
+package com.example.instalens.domain.manager.datastore
 
 import kotlinx.coroutines.flow.Flow
 

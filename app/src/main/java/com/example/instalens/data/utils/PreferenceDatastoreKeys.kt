@@ -1,4 +1,4 @@
-package com.example.instalens.data.manager
+package com.example.instalens.data.utils
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.example.instalens.utils.Constants
