@@ -24,7 +24,6 @@ import com.example.instalens.R
 import com.example.instalens.presentation.utils.Dimens
 import com.example.instalens.presentation.common.PrimaryButton
 import com.example.instalens.presentation.common.SecondaryButton
-import com.example.instalens.presentation.home.components.CameraPermissionRequest
 import com.example.instalens.presentation.onboarding.components.OnBoardingPage
 import com.example.instalens.presentation.onboarding.components.OnBoardingPageIndicator
 import kotlinx.coroutines.launch
