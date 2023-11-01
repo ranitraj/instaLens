@@ -20,4 +20,5 @@ object Dimens {
     val IndicatorSize = 16.dp
     val ObjectCounterIconSize = 24.dp
     val OnBoardingPageIndicatorWidth = 60.dp
+    val CaptureButtonSize = 96.dp
 }
