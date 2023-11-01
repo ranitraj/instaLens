@@ -66,5 +66,5 @@ fun ThresholdLevelSlider(thresholdValue: (Float) -> Unit) {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun PreviewConfidenceSlider() {
-    ThresholdLevelSlider { /* Do something with the value */ }
+    ThresholdLevelSlider {}
 }
