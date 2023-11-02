@@ -1,5 +1,6 @@
 package com.example.instalens.presentation.home
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,13 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.instalens.R
+import com.example.instalens.presentation.common.ComposableToast
 import com.example.instalens.presentation.common.ImageButton
-import com.example.instalens.presentation.home.components.CameraPermissionRequest
 import com.example.instalens.presentation.home.components.CameraPreview
 import com.example.instalens.presentation.home.components.ObjectCounter
+import com.example.instalens.presentation.home.components.RequestPermissions
 import com.example.instalens.presentation.home.components.ThresholdLevelSlider
 import com.example.instalens.presentation.utils.Dimens
 import com.example.instalens.utils.Constants
@@ -36,8 +41,11 @@ fun HomeScreen() {
     val context = LocalContext.current
     val viewModel: HomeViewModel = viewModel()
 
-    // Request Camera Permission
-    CameraPermissionRequest()
+    // Request Permissions
+    RequestPermissions()
+
+    // Collect value emitted by 'isImageSavedStateFlow' when image is captured
+    val isImageSavedStateFlow by viewModel.isImageSavedStateFlow.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -82,12 +90,26 @@ fun HomeScreen() {
                         .clip(CircleShape)
                         .align(Alignment.CenterHorizontally)
                         .clickable {
-                            // Capture Photo
+                            // Capture and Saves Photo
                             viewModel.capturePhoto(
                                 context = context,
-                                cameraController = cameraController,
-                                viewModel::onPhotoTaken
+                                cameraController = cameraController
                             )
+
+                            // Show toast of Save State
+                            if (isImageSavedStateFlow) {
+                                Toast.makeText(
+                                    context,
+                                    R.string.success_image_saved_message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    R.string.error_image_saved_message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                 )
 

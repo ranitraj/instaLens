@@ -11,4 +11,8 @@
     <string name="button_next">Next</string>
     <string name="button_back">Back</string>
     <string name="button_begin">Begin</string>
+
+    <!-- Messages -->
+    <string name="success_image_saved_message">Image Saved Successfully to Device</string>
+    <string name="error_image_saved_message">Oops! Image could not be saved</string>
 </resources>

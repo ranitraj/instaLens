@@ -1,8 +1,14 @@
 package com.example.instalens.presentation.home
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.media.MediaScannerConnection
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -12,9 +18,17 @@ import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,8 +46,8 @@ class HomeViewModel @Inject constructor(
         Bitmap.Config.ARGB_8888
     )
 
-    private val _bitmapStateFlow = MutableStateFlow(emptyBitmap)
-    val bitmapStateFlow = _bitmapStateFlow.asStateFlow()
+    private val _isImageSavedStateFlow = MutableStateFlow(true)
+    val isImageSavedStateFlow = _isImageSavedStateFlow.asStateFlow()
 
     /**
      * Initializes and returns a `LifecycleCameraController` instance with the specified use cases.
@@ -74,16 +88,15 @@ class HomeViewModel @Inject constructor(
      *
      * This function initiates a photo capture and once successful, it rotates the image based on
      * its rotation degrees. Also, if the image is captured using the front camera, it
-     * inverts the image along the X-axis. After processing the image, the resulting bitmap is
-     * passed to the provided callback function `onPhotoTaken`.
+     * inverts the image along the X-axis. After processing the image, the resulting bitmap is saved
+     * by calling the 'saveBitmapToDevice' private method,
      *
      * @param context The application's context.
      * @param cameraController The lifecycle-aware camera controller to manage the photo capture.
      */
     fun capturePhoto(
         context: Context,
-        cameraController: LifecycleCameraController,
-        onPhotoTaken: (Bitmap) -> Unit
+        cameraController: LifecycleCameraController
     ) {
         cameraController.takePicture(
             ContextCompat.getMainExecutor(context),
@@ -116,13 +129,17 @@ class HomeViewModel @Inject constructor(
                         true
                     )
 
-                    // Post the value using the State-Flow
-                    onPhotoTaken(rotatedBitmap)
+                    // Save the Image-Bitmap to Device
+                    saveBitmapToDevice(
+                        context = context,
+                        capturedImageBitmap = rotatedBitmap
+                    )
                 }
 
                 override fun onError(exception: ImageCaptureException) {
                     super.onError(exception)
                     Log.e(TAG, "onError() called for capturePhoto with: exception = $exception")
+                    isPhotoSuccessfullySaved(false)
                 }
             }
         )
@@ -130,14 +147,81 @@ class HomeViewModel @Inject constructor(
 
 
     /**
-     * Handles the event when a photo is taken. Updates the [_bitmapStateFlow] with the provided
-     * bitmap called from HomeScreen as a function parameter
+     * Updates the state flow with the status of whether the photo has been successfully saved or not.
      *
-     * @param bitmap The captured photo represented as a [Bitmap].
+     * @param isSaved Boolean flag indicating if the photo was successfully saved.
      */
-    fun onPhotoTaken(bitmap: Bitmap) {
+    private fun isPhotoSuccessfullySaved(isSaved: Boolean) {
         Log.d(TAG, "onPhotoTaken() called: updating value of _bitmapStateFlow")
-        _bitmapStateFlow.value = bitmap
+        _isImageSavedStateFlow.value = isSaved
+    }
+
+
+    /**
+     * Saves the provided bitmap to the device's external storage.
+     *
+     * This function saves the bitmap in the device's picture directory and gives it a unique name based on the current system time.
+     * For devices running Android API 29 and above, the bitmap is saved using the MediaStore API which ensures that the saved image
+     * is immediately visible in gallery apps without the need for any additional scanning.
+     *
+     * @param context The application context used for content resolution.
+     * @param capturedImageBitmap The bitmap image to be saved.
+     */
+    private fun saveBitmapToDevice(
+        context: Context,
+        capturedImageBitmap: Bitmap
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                Log.d(TAG, "saveBitmapToDevice() called for Version = ${Build.VERSION.SDK_INT}")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val values = ContentValues().apply {
+                        put(MediaStore.Images.Media.DISPLAY_NAME, generateImageName())
+                        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                        put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                    }
+
+                    val uri: Uri? = context.contentResolver.insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values
+                    )
+
+                    uri?.let {
+                        context.contentResolver.openOutputStream(it).use { outputStream ->
+                            if (outputStream != null) {
+                                capturedImageBitmap.compress(
+                                    Bitmap.CompressFormat.JPEG,
+                                    100,
+                                    outputStream
+                                )
+                            }
+                            outputStream?.flush()
+                            outputStream?.close()
+                        }
+                    }
+
+                    // Update _isImageSavedStateFlow value to true
+                    isPhotoSuccessfullySaved(true)
+                }
+            } catch (exception: Exception) {
+                Log.e(TAG, "saveBitmapToDevice() called with: exception = $exception")
+                isPhotoSuccessfullySaved(false)
+            }
+        }
+    }
+
+
+    /**
+     * Returns the current system time in a formatted string, prepended with "IMG_".
+     * The returned string is in the format "IMG_YYYYMMDD_HHMMSS", which represents the current system time.
+     *
+     * @return A formatted string representing the current system time, prepended with "IMG_".
+     */
+    private fun generateImageName(): String {
+        Log.d(TAG, "generateImageName() called")
+        val currentDateTime = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+        val formattedDate = dateFormat.format(currentDateTime)
+        return "IMG_$formattedDate"
     }
 
 }
