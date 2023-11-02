@@ -5,7 +5,7 @@ import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManag
 import org.tensorflow.lite.task.vision.detector.Detection
 import javax.inject.Inject
 
-class DetectObjectUseCase @Inject constructor(
+class DetectObjectUseCase(
     private val objectDetectionManager: ObjectDetectionManager
 ) {
     /**

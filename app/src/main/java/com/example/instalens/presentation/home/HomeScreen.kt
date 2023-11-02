@@ -1,6 +1,7 @@
 package com.example.instalens.presentation.home
 
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.instalens.R
-import com.example.instalens.presentation.common.ComposableToast
 import com.example.instalens.presentation.common.ImageButton
 import com.example.instalens.presentation.home.components.CameraPreview
 import com.example.instalens.presentation.home.components.ObjectCounter
@@ -39,7 +38,7 @@ import com.example.instalens.utils.Constants
 @Composable
 fun HomeScreen() {
     val context = LocalContext.current
-    val viewModel: HomeViewModel = viewModel()
+    val viewModel: HomeViewModel = hiltViewModel()
 
     // Request Permissions
     RequestPermissions()

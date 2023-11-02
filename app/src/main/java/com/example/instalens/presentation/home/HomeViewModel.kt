@@ -18,6 +18,8 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.instalens.domain.usecases.detection.DetectObjectUseCase
+import com.example.instalens.utils.CameraFrameAnalyzer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,21 +32,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-
+    private val detectObjectUseCase: DetectObjectUseCase
 ): ViewModel() {
     companion object {
         private val TAG: String? = HomeViewModel::class.simpleName
     }
 
-    // Empty-Bitmap to initialize State-Flow
-    private val emptyBitmap = Bitmap.createBitmap(
-        1,
-        1,
-        Bitmap.Config.ARGB_8888
-    )
-
     private val _isImageSavedStateFlow = MutableStateFlow(true)
     val isImageSavedStateFlow = _isImageSavedStateFlow.asStateFlow()
+
+
+    fun prepareImageAnalyzer(context: Context): CameraFrameAnalyzer {
+        Log.d(TAG, "prepareImageAnalyzer() called")
+        return CameraFrameAnalyzer(
+            detectObjectUseCase,
+            onObjectDetectionResults = {
+
+            }
+        )
+    }
 
     /**
      * Initializes and returns a `LifecycleCameraController` instance with the specified use cases.
@@ -60,7 +66,10 @@ class HomeViewModel @Inject constructor(
                 CameraController.IMAGE_ANALYSIS or
                         CameraController.IMAGE_CAPTURE
             )
-            // TODO: Initialize Image Analyzer
+//            setImageAnalysisAnalyzer(
+//                ContextCompat.getMainExecutor(context),
+//                cameraFrameAnalyzer
+//            )
         }
     }
 

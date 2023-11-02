@@ -1,12 +1,13 @@
 package com.example.instalens.data.manager.objectDetection
 
+import android.content.Context
 import android.graphics.Bitmap
 import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
 import org.tensorflow.lite.task.vision.detector.Detection
 import javax.inject.Inject
 
 class ObjectDetectionManagerImpl @Inject constructor(
-
+    private val context: Context
 ): ObjectDetectionManager {
 
     /**
