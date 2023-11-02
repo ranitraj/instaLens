@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.instalens.domain.usecases.userconfig.UserConfigUseCases
 import com.example.instalens.presentation.navgraph.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -47,6 +48,7 @@ class MainViewModel @Inject constructor(
             }
 
             // Setting as 'false' after execution of code to exit out of SplashScreen
+            delay(400)
             redirectFlagState = false
         }.launchIn(viewModelScope)      // Start collecting the flow & handle each emitted item within the coroutine scope
     }

@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -24,8 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -147,17 +144,6 @@ class HomeViewModel @Inject constructor(
 
 
     /**
-     * Updates the state flow with the status of whether the photo has been successfully saved or not.
-     *
-     * @param isSaved Boolean flag indicating if the photo was successfully saved.
-     */
-    private fun isPhotoSuccessfullySaved(isSaved: Boolean) {
-        Log.d(TAG, "onPhotoTaken() called: updating value of _bitmapStateFlow")
-        _isImageSavedStateFlow.value = isSaved
-    }
-
-
-    /**
      * Saves the provided bitmap to the device's external storage.
      *
      * This function saves the bitmap in the device's picture directory and gives it a unique name based on the current system time.
@@ -207,6 +193,17 @@ class HomeViewModel @Inject constructor(
                 isPhotoSuccessfullySaved(false)
             }
         }
+    }
+
+
+    /**
+     * Updates the state flow with the status of whether the photo has been successfully saved or not.
+     *
+     * @param isSaved Boolean flag indicating if the photo was successfully saved.
+     */
+    private fun isPhotoSuccessfullySaved(isSaved: Boolean) {
+        Log.d(TAG, "isPhotoSuccessfullySaved() called with: isSaved Flag = $isSaved")
+        _isImageSavedStateFlow.value = isSaved
     }
 
 
