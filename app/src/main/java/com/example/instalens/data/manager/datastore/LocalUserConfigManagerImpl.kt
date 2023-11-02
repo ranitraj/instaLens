@@ -7,8 +7,9 @@ import com.example.instalens.data.utils.PreferenceDatastoreKeys
 import com.example.instalens.domain.manager.datastore.LocalUserConfigManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class LocalUserConfigManagerImpl(
+class LocalUserConfigManagerImpl @Inject constructor(
     private val context: Context
 ): LocalUserConfigManager {
 
