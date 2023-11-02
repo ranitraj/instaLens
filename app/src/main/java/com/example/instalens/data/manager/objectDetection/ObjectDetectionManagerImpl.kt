@@ -2,11 +2,11 @@ package com.example.instalens.data.manager.objectDetection
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.Surface
 import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
 import com.example.instalens.domain.model.Detection
 import com.example.instalens.utils.Constants
+import org.tensorflow.lite.gpu.CompatibilityList
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.core.BaseOptions
@@ -42,6 +42,7 @@ class ObjectDetectionManagerImpl @Inject constructor(
             TensorImage.fromBitmap(bitmap)
         )
 
+        // Obtain Results
         val detectionResults = detector?.detect(
             tensorImage,
             tfLiteImageProcessingOptions
@@ -49,15 +50,13 @@ class ObjectDetectionManagerImpl @Inject constructor(
 
         // Map detected objects to 'Detection' and filter by confidence threshold
         return detectionResults?.mapNotNull { detectedObject ->
-            Log.d(
-                "RRG",
-                "detectObjectsInCurrentFrame() called with: detectedObject = $detectedObject"
-            )
             if ((detectedObject.categories.firstOrNull()?.score ?: 0f) >= confidenceThreshold) {
                 Detection(
                     boundingBox = detectedObject.boundingBox,
                     detectedObjectName = detectedObject.categories.firstOrNull()?.label ?: "",
-                    confidenceScore = detectedObject.categories.firstOrNull()?.score ?: 0f
+                    confidenceScore = detectedObject.categories.firstOrNull()?.score ?: 0f,
+                    tensorImage.height,
+                    tensorImage.width
                 )
             } else null
         }?.take(Constants.MODEL_MAX_RESULTS_COUNT) ?: emptyList()
@@ -71,12 +70,15 @@ class ObjectDetectionManagerImpl @Inject constructor(
     private fun initializeDetector(confidenceThreshold: Float) {
         try {
             val baseOptions = BaseOptions.builder()
-                .setNumThreads(3)
-                .useGpu()
-                .build()
+                .setNumThreads(2)
+
+            // Using GPU if available
+            if (CompatibilityList().isDelegateSupportedOnThisDevice) {
+                baseOptions.useGpu()
+            }
 
             val options = ObjectDetector.ObjectDetectorOptions.builder()
-                .setBaseOptions(baseOptions)
+                .setBaseOptions(baseOptions.build())
                 .setMaxResults(Constants.MODEL_MAX_RESULTS_COUNT)
                 .setScoreThreshold(confidenceThreshold)
                 .build()

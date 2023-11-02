@@ -1,5 +1,9 @@
 package com.example.instalens.presentation.home.components
 
+import android.view.ViewGroup
+import androidx.camera.core.AspectRatio
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
@@ -26,6 +30,11 @@ fun CameraPreview(
     AndroidView(
         factory = {
             PreviewView(it).apply {
+                // Mapping Aspect-Ratio as 4:3
+                this.layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    (ViewGroup.LayoutParams.MATCH_PARENT * (4f/3f)).toInt()
+                )
                 this.controller = controller
                 controller.bindToLifecycle(lifeCycleOwner)
             }

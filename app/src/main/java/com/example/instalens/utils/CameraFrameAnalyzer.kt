@@ -1,5 +1,7 @@
 package com.example.instalens.utils
 
+import android.graphics.Bitmap
+import androidx.camera.core.AspectRatio
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
@@ -15,7 +17,6 @@ import javax.inject.Inject
  * The frames are processed at a rate of 1 frame per-second to optimize performance. Once objects
  * are detected, the results are then communicated back via the [onObjectDetectionResults] callback.
  *
- * @property detectObjectUseCase UseCase responsible for detecting objects within a given bitmap.
  * @property onObjectDetectionResults Callback to report detected objects from the processed frames.
  *
  * @constructor Injects the dependencies required for this analyzer.

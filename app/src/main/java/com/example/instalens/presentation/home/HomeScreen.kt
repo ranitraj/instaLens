@@ -72,7 +72,7 @@ fun HomeScreen() {
                     context = context
                 ),
                 onObjectDetectionResults = {
-                    detectedObjectCount = it.size
+                    Log.d("RRG", "onObjectDetectionResults == $detections")
                     detections = it
                 }
             )
