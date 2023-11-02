@@ -1,7 +1,7 @@
 package com.example.instalens.domain.manager.objectDetection
 
 import android.graphics.Bitmap
-import org.tensorflow.lite.task.vision.detector.Detection
+import com.example.instalens.domain.model.Detection
 
 /**
  * Interface responsible for managing object detection operations.
@@ -9,6 +9,7 @@ import org.tensorflow.lite.task.vision.detector.Detection
 interface ObjectDetectionManager {
     fun detectObjectsInCurrentFrame(
         bitmap: Bitmap,
-        rotation: Int
+        rotation: Int,
+        confidenceThreshold: Float
     ): List<Detection>
 }

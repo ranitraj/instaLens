@@ -2,9 +2,9 @@ package com.example.instalens.utils
 
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.example.instalens.domain.model.Detection
 import com.example.instalens.domain.usecases.detection.DetectObjectUseCase
 import com.example.instalens.utils.extensions.cropImage
-import org.tensorflow.lite.task.vision.detector.Detection
 import javax.inject.Inject
 
 /**
@@ -37,9 +37,11 @@ class CameraFrameAnalyzer @Inject constructor(
                 )
 
             // Obtaining results via Use-Case
+            // TODO: Replace constant confidence score with dynamic value
             val objectDetectionResults = detectObjectUseCase.execute(
                 bitmap = bitmap,
-                rotationDegrees
+                rotationDegrees,
+                Constants.INITIAL_CONFIDENCE_SCORE
             )
             onObjectDetectionResults(objectDetectionResults)
         }
