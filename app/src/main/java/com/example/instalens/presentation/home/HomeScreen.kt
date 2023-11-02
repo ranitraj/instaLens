@@ -2,6 +2,7 @@ package com.example.instalens.presentation.home
 
 import android.content.Context
 import android.util.Log
+import androidx.camera.core.CameraSelector
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.background
@@ -21,8 +22,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.zIndex
+import androidx.core.content.ContextCompat
 import com.example.instalens.R
 import com.example.instalens.presentation.common.ImageButton
 import com.example.instalens.presentation.home.components.CameraPermissionRequest
@@ -33,10 +36,9 @@ import com.example.instalens.presentation.utils.Dimens
 import com.example.instalens.utils.Constants
 
 @Composable
-fun HomeScreen(
-    context: Context
-) {
+fun HomeScreen() {
     val composableTag: String? = "HomeScreen"
+    val context = LocalContext.current
 
     // Request Camera Permission
     CameraPermissionRequest()
@@ -44,6 +46,18 @@ fun HomeScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+
+
+        // Prepare Camera Controller
+        val cameraController =
+            LifecycleCameraController(context).apply {
+                setEnabledUseCases(
+                    CameraController.IMAGE_ANALYSIS or
+                            CameraController.IMAGE_CAPTURE
+                )
+            // TODO: Initialize Image Analyzer
+        }
+
         // Combined Column for Camera Preview & Bottom UI
         Column(
             modifier = Modifier
@@ -58,13 +72,7 @@ fun HomeScreen(
             ) {
                 CameraPreview(
                     controller =  remember {
-                        LifecycleCameraController(context).apply {
-                            setEnabledUseCases(
-                                CameraController.IMAGE_ANALYSIS or
-                                        CameraController.IMAGE_CAPTURE
-                            )
-                            // TODO: Initialize Image Analyzer
-                        }
+                        cameraController
                     },
                     modifier = Modifier.fillMaxSize()
                 )
@@ -123,8 +131,13 @@ fun HomeScreen(
                         )
                         .size(Dimens.RotateCameraButtonSize)
                         .clickable {
-                            // TODO: Rotate Camera
                             Log.d(composableTag, "onClick() called for Rotate-Camera Button")
+                            cameraController.cameraSelector =
+                                if (cameraController.cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                                    CameraSelector.DEFAULT_FRONT_CAMERA
+                                } else {
+                                    CameraSelector.DEFAULT_BACK_CAMERA
+                                }
                         }
                 )
 

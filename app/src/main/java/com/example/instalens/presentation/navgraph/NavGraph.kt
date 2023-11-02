@@ -15,7 +15,6 @@ import com.example.instalens.presentation.onboarding.viewmodel.OnBoardingViewMod
 
 @Composable
 fun NavGraph(
-    context: Context,
     startDestination: String
 ) {
     val navController: NavHostController = rememberNavController()
@@ -50,7 +49,7 @@ fun NavGraph(
             composable(
                 route = Route.HomeScreen.route
             ) {
-                HomeScreen(context = context)
+                HomeScreen()
             }
         }
     }

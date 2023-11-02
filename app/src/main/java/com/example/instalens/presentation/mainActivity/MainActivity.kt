@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.example.instalens.presentation.navgraph.NavGraph
@@ -42,10 +43,7 @@ class MainActivity : ComponentActivity() {
                     val startDestination = viewModel.startDestination
                     Log.d(TAG, "setContent() called with startDestination = $startDestination ")
 
-                    NavGraph(
-                        context = applicationContext,
-                        startDestination = startDestination
-                    )
+                    NavGraph(startDestination = startDestination)
                 }
             }
         }
