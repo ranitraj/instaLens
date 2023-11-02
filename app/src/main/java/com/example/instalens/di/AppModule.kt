@@ -3,6 +3,8 @@ package com.example.instalens.di
 import android.app.Application
 import com.example.instalens.data.manager.datastore.LocalUserConfigManagerImpl
 import com.example.instalens.domain.manager.datastore.LocalUserConfigManager
+import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
+import com.example.instalens.domain.usecases.detection.DetectObjectUseCase
 import com.example.instalens.domain.usecases.userconfig.ReadUserConfig
 import com.example.instalens.domain.usecases.userconfig.UserConfigUseCases
 import com.example.instalens.domain.usecases.userconfig.WriteUserConfig
@@ -30,5 +32,13 @@ class AppModule {
     ): UserConfigUseCases = UserConfigUseCases(
         readUserConfig = ReadUserConfig(localUserConfigManager),
         writeUserConfig = WriteUserConfig(localUserConfigManager)
+    )
+
+    @Provides
+    @Singleton
+    fun provideDetectObjectUseCase(
+        objectDetectionManager: ObjectDetectionManager
+    ): DetectObjectUseCase = DetectObjectUseCase(
+        objectDetectionManager = objectDetectionManager
     )
 }
