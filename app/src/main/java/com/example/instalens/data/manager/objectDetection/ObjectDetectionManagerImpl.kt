@@ -2,6 +2,7 @@ package com.example.instalens.data.manager.objectDetection
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.Surface
 import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
 import com.example.instalens.domain.model.Detection
@@ -48,10 +49,14 @@ class ObjectDetectionManagerImpl @Inject constructor(
 
         // Map detected objects to 'Detection' and filter by confidence threshold
         return detectionResults?.mapNotNull { detectedObject ->
+            Log.d(
+                "RRG",
+                "detectObjectsInCurrentFrame() called with: detectedObject = $detectedObject"
+            )
             if ((detectedObject.categories.firstOrNull()?.score ?: 0f) >= confidenceThreshold) {
                 Detection(
                     boundingBox = detectedObject.boundingBox,
-                    detectedObjectName = detectedObject.categories.firstOrNull()?.displayName ?: "",
+                    detectedObjectName = detectedObject.categories.firstOrNull()?.label ?: "",
                     confidenceScore = detectedObject.categories.firstOrNull()?.score ?: 0f
                 )
             } else null

@@ -2,6 +2,7 @@ package com.example.instalens.utils
 
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
 import com.example.instalens.domain.model.Detection
 import com.example.instalens.domain.usecases.detection.DetectObjectUseCase
 import com.example.instalens.utils.extensions.cropImage
@@ -20,7 +21,7 @@ import javax.inject.Inject
  * @constructor Injects the dependencies required for this analyzer.
  */
 class CameraFrameAnalyzer @Inject constructor(
-    private val detectObjectUseCase: DetectObjectUseCase,
+    private val objectDetectionManager: ObjectDetectionManager,
     private val onObjectDetectionResults: (List<Detection>) -> Unit
 ): ImageAnalysis.Analyzer {
     private var frameSkipCounter = 0
@@ -29,19 +30,14 @@ class CameraFrameAnalyzer @Inject constructor(
         // Analyze only 1 frame per-second
         if (frameSkipCounter % 60 == 0) {
             val rotationDegrees = image.imageInfo.rotationDegrees
-            val bitmap = image
-                .toBitmap()
-                .cropImage(
-                    Constants.MODEL_INPUT_IMAGE_WIDTH,
-                    Constants.MODEL_INPUT_IMAGE_HEIGHT
-                )
+            val bitmap = image.toBitmap()
 
             // Obtaining results via Use-Case
             // TODO: Replace constant confidence score with dynamic value
-            val objectDetectionResults = detectObjectUseCase.execute(
+            val objectDetectionResults = objectDetectionManager.detectObjectsInCurrentFrame(
                 bitmap = bitmap,
                 rotationDegrees,
-                Constants.INITIAL_CONFIDENCE_SCORE
+                0.5f
             )
             onObjectDetectionResults(objectDetectionResults)
         }

@@ -41,17 +41,6 @@ class HomeViewModel @Inject constructor(
     private val _isImageSavedStateFlow = MutableStateFlow(true)
     val isImageSavedStateFlow = _isImageSavedStateFlow.asStateFlow()
 
-
-    fun prepareImageAnalyzer(context: Context): CameraFrameAnalyzer {
-        Log.d(TAG, "prepareImageAnalyzer() called")
-        return CameraFrameAnalyzer(
-            detectObjectUseCase,
-            onObjectDetectionResults = {
-
-            }
-        )
-    }
-
     /**
      * Initializes and returns a `LifecycleCameraController` instance with the specified use cases.
      * This function sets up the camera controller for image analysis and image capture.
@@ -59,17 +48,20 @@ class HomeViewModel @Inject constructor(
      * @param context context used for managing the lifecycle of the camera controller.
      * @return Returns a fully initialized `LifecycleCameraController` instance.
      */
-    fun prepareCameraController(context: Context): LifecycleCameraController {
+    fun prepareCameraController(
+        context: Context,
+        cameraFrameAnalyzer: CameraFrameAnalyzer
+    ): LifecycleCameraController {
         Log.d(TAG, "prepareCameraController() called")
         return LifecycleCameraController(context).apply {
             setEnabledUseCases(
                 CameraController.IMAGE_ANALYSIS or
                         CameraController.IMAGE_CAPTURE
             )
-//            setImageAnalysisAnalyzer(
-//                ContextCompat.getMainExecutor(context),
-//                cameraFrameAnalyzer
-//            )
+            setImageAnalysisAnalyzer(
+                ContextCompat.getMainExecutor(context),
+                cameraFrameAnalyzer
+            )
         }
     }
 
