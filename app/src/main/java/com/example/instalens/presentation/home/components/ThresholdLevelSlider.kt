@@ -51,7 +51,9 @@ fun ThresholdLevelSlider(
                 value = sliderValue.value,
                 onValueChange = {
                     sliderValue.value = it
-                    thresholdValue(it)
+                },
+                onValueChangeFinished = {
+                    thresholdValue(sliderValue.value)
                 },
                 valueRange = 0f..1f,
                 modifier = Modifier
