@@ -1,4 +1,4 @@
-package com.example.instalens.data.extensions
+package com.example.instalens.utils.extensions
 
 import android.content.Context
 import androidx.datastore.core.DataStore
