@@ -1,5 +1,6 @@
 package com.example.instalens.presentation.home
 
+import android.graphics.RectF
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -18,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.instalens.R
@@ -39,19 +42,25 @@ import com.example.instalens.presentation.home.components.ThresholdLevelSlider
 import com.example.instalens.presentation.utils.Dimens
 import com.example.instalens.utils.CameraFrameAnalyzer
 import com.example.instalens.utils.Constants
+import com.example.instalens.utils.ImageScalingUtils
 
 
 @Composable
 fun HomeScreen() {
     val context = LocalContext.current
     val viewModel: HomeViewModel = hiltViewModel()
-    var detectedObjectCount: Int = 0
 
     // Request Permissions
     RequestPermissions()
 
     // Collect value emitted by 'isImageSavedStateFlow' when image is captured
     val isImageSavedStateFlow by viewModel.isImageSavedStateFlow.collectAsState()
+
+    // State to hold the preview size
+    val previewSizeState = remember { mutableStateOf(IntSize(0, 0)) }
+
+    // State to hold RectF coordinates
+    val boundingBoxCoordinatesState = remember { mutableStateListOf<RectF>() }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -74,9 +83,34 @@ fun HomeScreen() {
                 onObjectDetectionResults = {
                     Log.d("RRG", "onObjectDetectionResults == $detections")
                     detections = it
+
+                    // Clear the previous RectFs and add all new ones
+                    boundingBoxCoordinatesState.clear()
+                    detections.forEach { detection ->
+                        boundingBoxCoordinatesState.add(detection.boundingBox)
+                    }
                 }
             )
         }
+
+
+        // TODO: Remove just for logging
+        try {
+            boundingBoxCoordinatesState.forEach { rect ->
+                val scaledRect = ImageScalingUtils.scaleBoundingBox(
+                    rect,
+                    detections[0].tensorImageWidth,
+                    detections[0].tensorImageHeight,
+                    previewSizeState.value.width,
+                    previewSizeState.value.height
+                )
+
+                Log.d("RRG", "Corresponding RectF coordinates for detection: L = ${scaledRect.left}, T = ${scaledRect.top}, R = ${scaledRect.right}, B = ${scaledRect.bottom}")
+            }
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
+
 
         // Prepare Camera Controller
         val cameraController = remember {
@@ -102,7 +136,10 @@ fun HomeScreen() {
                     controller =  remember {
                         cameraController
                     },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    onPreviewSizeChanged = { newSize ->
+                        previewSizeState.value = newSize
+                    }
                 )
             }
 

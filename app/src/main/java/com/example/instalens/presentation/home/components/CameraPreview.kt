@@ -1,14 +1,15 @@
 package com.example.instalens.presentation.home.components
 
 import android.view.ViewGroup
-import androidx.camera.core.AspectRatio
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 
@@ -23,9 +24,11 @@ import androidx.lifecycle.LifecycleOwner
 @Composable
 fun CameraPreview(
     controller: LifecycleCameraController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onPreviewSizeChanged: (IntSize) -> Unit
 ) {
     val lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    val previewSizeState = remember { mutableStateOf(IntSize(0, 0)) }
 
     AndroidView(
         factory = {
@@ -39,6 +42,10 @@ fun CameraPreview(
                 controller.bindToLifecycle(lifeCycleOwner)
             }
         },
-        modifier = modifier
+        modifier = modifier.onGloballyPositioned { coordinates ->
+            val size = coordinates.size
+            previewSizeState.value = size
+            onPreviewSizeChanged(size)
+        }
     )
 }
