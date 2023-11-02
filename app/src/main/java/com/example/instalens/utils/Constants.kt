@@ -7,4 +7,6 @@ object Constants {
 
     // Values
     const val INITIAL_CONFIDENCE_SCORE = 0.75f
+    const val MODEL_INPUT_IMAGE_WIDTH = 384
+    const val MODEL_INPUT_IMAGE_HEIGHT = 384
 }
