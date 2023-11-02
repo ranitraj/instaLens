@@ -82,7 +82,12 @@ fun HomeScreen() {
                         .clip(CircleShape)
                         .align(Alignment.CenterHorizontally)
                         .clickable {
-                            // TODO: Capture and Save Image into device
+                            // Capture Photo
+                            viewModel.capturePhoto(
+                                context = context,
+                                cameraController = cameraController,
+                                viewModel::onPhotoTaken
+                            )
                         }
                 )
 

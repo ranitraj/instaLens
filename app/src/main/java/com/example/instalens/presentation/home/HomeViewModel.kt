@@ -13,6 +13,8 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +24,16 @@ class HomeViewModel @Inject constructor(
     companion object {
         private val TAG: String? = HomeViewModel::class.simpleName
     }
+
+    // Empty-Bitmap to initialize State-Flow
+    private val emptyBitmap = Bitmap.createBitmap(
+        1,
+        1,
+        Bitmap.Config.ARGB_8888
+    )
+
+    private val _bitmapStateFlow = MutableStateFlow(emptyBitmap)
+    val bitmapStateFlow = _bitmapStateFlow.asStateFlow()
 
     /**
      * Initializes and returns a `LifecycleCameraController` instance with the specified use cases.
@@ -67,7 +79,6 @@ class HomeViewModel @Inject constructor(
      *
      * @param context The application's context.
      * @param cameraController The lifecycle-aware camera controller to manage the photo capture.
-     * @param onPhotoTaken A callback that is invoked with the processed bitmap once the photo is captured and processed.
      */
     fun capturePhoto(
         context: Context,
@@ -105,6 +116,7 @@ class HomeViewModel @Inject constructor(
                         true
                     )
 
+                    // Post the value using the State-Flow
                     onPhotoTaken(rotatedBitmap)
                 }
 
@@ -114,6 +126,18 @@ class HomeViewModel @Inject constructor(
                 }
             }
         )
+    }
+
+
+    /**
+     * Handles the event when a photo is taken. Updates the [_bitmapStateFlow] with the provided
+     * bitmap called from HomeScreen as a function parameter
+     *
+     * @param bitmap The captured photo represented as a [Bitmap].
+     */
+    fun onPhotoTaken(bitmap: Bitmap) {
+        Log.d(TAG, "onPhotoTaken() called: updating value of _bitmapStateFlow")
+        _bitmapStateFlow.value = bitmap
     }
 
 }
