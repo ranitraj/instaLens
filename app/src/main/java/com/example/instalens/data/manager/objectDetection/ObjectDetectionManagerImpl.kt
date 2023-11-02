@@ -69,17 +69,18 @@ class ObjectDetectionManagerImpl @Inject constructor(
      * @param confidenceThreshold The minimum confidence score required for a detected object to be considered.
      */
     private fun initializeDetector(confidenceThreshold: Float) {
-        val baseOptions = BaseOptions.builder()
-            .setNumThreads(2)
-            .build()
-
-        val options = ObjectDetector.ObjectDetectorOptions.builder()
-            .setBaseOptions(baseOptions)
-            .setMaxResults(Constants.MODEL_MAX_RESULTS_COUNT)
-            .setScoreThreshold(confidenceThreshold)
-            .build()
-
         try {
+            val baseOptions = BaseOptions.builder()
+                .setNumThreads(3)
+                .useGpu()
+                .build()
+
+            val options = ObjectDetector.ObjectDetectorOptions.builder()
+                .setBaseOptions(baseOptions)
+                .setMaxResults(Constants.MODEL_MAX_RESULTS_COUNT)
+                .setScoreThreshold(confidenceThreshold)
+                .build()
+
             detector = ObjectDetector.createFromFileAndOptions(
                 context,
                 Constants.MODEL_PATH,

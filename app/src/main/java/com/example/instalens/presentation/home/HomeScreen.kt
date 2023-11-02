@@ -78,10 +78,12 @@ fun HomeScreen() {
         }
 
         // Prepare Camera Controller
-        val cameraController = viewModel.prepareCameraController(
-            context,
-            cameraFrameAnalyzer
-        )
+        val cameraController = remember {
+            viewModel.prepareCameraController(
+                context,
+                cameraFrameAnalyzer
+            )
+        }
 
         // Combined Column for Camera Preview & Bottom UI
         Column(
