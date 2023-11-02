@@ -1,7 +1,5 @@
 package com.example.instalens.presentation.home
 
-import android.util.Log
-import androidx.camera.core.CameraSelector
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,14 +27,12 @@ import com.example.instalens.presentation.home.components.CameraPermissionReques
 import com.example.instalens.presentation.home.components.CameraPreview
 import com.example.instalens.presentation.home.components.ObjectCounter
 import com.example.instalens.presentation.home.components.ThresholdLevelSlider
-import com.example.instalens.presentation.home.viewmodel.HomeViewModel
 import com.example.instalens.presentation.utils.Dimens
 import com.example.instalens.utils.Constants
 
 
 @Composable
 fun HomeScreen() {
-    val composableTag: String? = "HomeScreen"
     val context = LocalContext.current
     val viewModel: HomeViewModel = viewModel()
 
@@ -87,14 +83,13 @@ fun HomeScreen() {
                         .align(Alignment.CenterHorizontally)
                         .clickable {
                             // TODO: Capture and Save Image into device
-                            Log.d(composableTag, "onClick() called for Capture-Image Button")
                         }
                 )
 
                 // Threshold Level Slider
                 val sliderValue = remember { mutableFloatStateOf(Constants.INITIAL_CONFIDENCE_SCORE) }
                 ThresholdLevelSlider(sliderValue) { sliderValue ->
-                    Log.d(composableTag, "HomeScreen() composable called with: sliderValue = $sliderValue")
+                    // TODO: Pass to VM then to ML model
                 }
             }
         }
@@ -129,7 +124,7 @@ fun HomeScreen() {
                 )
 
                 // Detected Object Count Composable
-                ObjectCounter(objectCount = 5)  // TODO: Pass from TFLite model
+                ObjectCounter(objectCount = 0)  // TODO: Pass from TFLite model
             }
         }
     }

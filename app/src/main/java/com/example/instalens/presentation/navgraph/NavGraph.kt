@@ -1,7 +1,5 @@
 package com.example.instalens.presentation.navgraph
 
-import android.app.Application
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -11,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.instalens.presentation.home.HomeScreen
 import com.example.instalens.presentation.onboarding.OnBoardingScreen
-import com.example.instalens.presentation.onboarding.viewmodel.OnBoardingViewModel
+import com.example.instalens.presentation.onboarding.OnBoardingViewModel
 
 @Composable
 fun NavGraph(

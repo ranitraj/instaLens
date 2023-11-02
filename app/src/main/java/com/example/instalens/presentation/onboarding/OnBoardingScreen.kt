@@ -26,6 +26,7 @@ import com.example.instalens.presentation.common.PrimaryButton
 import com.example.instalens.presentation.common.SecondaryButton
 import com.example.instalens.presentation.onboarding.components.OnBoardingPage
 import com.example.instalens.presentation.onboarding.components.OnBoardingPageIndicator
+import com.example.instalens.presentation.onboarding.model.pagesList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

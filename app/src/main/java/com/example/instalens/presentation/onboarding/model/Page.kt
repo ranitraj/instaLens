@@ -1,4 +1,4 @@
-package com.example.instalens.presentation.onboarding
+package com.example.instalens.presentation.onboarding.model
 
 import androidx.annotation.DrawableRes
 import com.example.instalens.R
