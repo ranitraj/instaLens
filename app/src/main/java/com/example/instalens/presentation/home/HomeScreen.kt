@@ -73,6 +73,9 @@ fun HomeScreen() {
     var scaleFactorX = 1f
     var scaleFactorY = 1f
 
+    val screenWidth = LocalContext.current.resources.displayMetrics.widthPixels * 1f
+    val screenHeight = LocalContext.current.resources.displayMetrics.heightPixels * 1f
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -141,6 +144,8 @@ fun HomeScreen() {
 
                         scaleFactorX = scaleFactors[0]
                         scaleFactorY = scaleFactors[1]
+
+                        Log.d("HomeViewModel", "HomeScreen() called with: newSize = $scaleFactorX & scaleFactorY = $scaleFactorY")
                     }
                 )
 
@@ -168,6 +173,8 @@ fun HomeScreen() {
                             viewModel.capturePhoto(
                                 context = context,
                                 cameraController = cameraController,
+                                screenWidth,
+                                screenHeight,
                                 detections
                             )
 

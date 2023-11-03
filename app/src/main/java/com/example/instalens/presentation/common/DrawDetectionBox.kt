@@ -22,6 +22,7 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.example.instalens.domain.model.Detection
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.random.Random
 
 /**
@@ -45,10 +46,13 @@ fun DrawDetectionBox(detection: Detection) {
     })
 
     // Calculate the scale factor based on the screen size and the image size from the detection dat
-    val scaleFactor = max(
-        LocalContext.current.resources.displayMetrics.widthPixels * 1f / detection.tensorImageWidth,
-        LocalContext.current.resources.displayMetrics.heightPixels * 1f / detection.tensorImageHeight
+    var  scaleFactor = min(
+        screenWidth * 1f / detection.tensorImageWidth,
+        screenHeight * 1f / detection.tensorImageHeight
     )
+
+    // Modified scale factor to best suit results (Brute-force)
+    scaleFactor *= 1.5f
 
     // Scale the bounding box from the detection to match the display dimensions
     val scaledBox = RectF(

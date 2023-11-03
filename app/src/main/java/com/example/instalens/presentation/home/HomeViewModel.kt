@@ -2,11 +2,11 @@ package com.example.instalens.presentation.home
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.RectF
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.instalens.domain.model.Detection
-import com.example.instalens.domain.usecases.detection.DetectObjectUseCase
 import com.example.instalens.utils.CameraFrameAnalyzer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,11 +32,16 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import android.graphics.Paint
+import android.util.DisplayMetrics
+import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
+import java.lang.Float.max
+import java.lang.Float.min
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val detectObjectUseCase: DetectObjectUseCase
+    private val objectDetectionManager: ObjectDetectionManager
 ): ViewModel() {
     companion object {
         private val TAG: String? = HomeViewModel::class.simpleName
@@ -100,6 +104,8 @@ class HomeViewModel @Inject constructor(
     fun capturePhoto(
         context: Context,
         cameraController: LifecycleCameraController,
+        screenWidth: Float,
+        screenHeight: Float,
         detections: List<Detection>
     ) {
         cameraController.takePicture(
@@ -133,7 +139,12 @@ class HomeViewModel @Inject constructor(
                         true
                     )
 
-                    val combinedBitmap = overlayDetectionsOnBitmap(rotatedBitmap, detections)
+                    val combinedBitmap = overlayDetectionsOnBitmap(
+                        rotatedBitmap,
+                        detections,
+                        screenWidth,
+                        screenHeight
+                    )
 
                     // Save the Image-Bitmap to Device
                     saveBitmapToDevice(
@@ -230,8 +241,21 @@ class HomeViewModel @Inject constructor(
         return "IMG_$formattedDate"
     }
 
-
-    fun overlayDetectionsOnBitmap(bitmap: Bitmap, detections: List<Detection>): Bitmap {
+    /**
+     * Overlays detection boxes on the provided bitmap image.
+     *
+     * @param bitmap The original bitmap image where detections will be overlaid.
+     * @param detections A list of [Detection] objects representing the detected items.
+     * @param screenWidth The width of the screen where the image will be displayed.
+     * @param screenHeight The height of the screen where the image will be displayed.
+     * @return A new [Bitmap] with overlaid detections.
+     */
+    fun overlayDetectionsOnBitmap(
+        bitmap: Bitmap,
+        detections: List<Detection>,
+        screenWidth: Float,
+        screenHeight: Float
+    ): Bitmap {
         val overlayBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
         val canvas = Canvas(overlayBitmap)
 
@@ -240,21 +264,110 @@ class HomeViewModel @Inject constructor(
 
         // Draw detections on the canvas (i.e., on top of the captured image)
         detections.forEach { detection ->
-            val rect = RectF(
-                detection.boundingBox.left,
-                detection.boundingBox.top,
-                detection.boundingBox.right,
-                detection.boundingBox.bottom
+            drawDetectionBox(
+                detection = detection,
+                originalBitmap = overlayBitmap,
+                screenWidth = screenWidth,
+                screenHeight = screenHeight
             )
-            val paint = Paint().apply {
-                color = Color.RED
-                style = Paint.Style.STROKE
-                strokeWidth = 4f
-            }
-            canvas.drawRect(rect, paint)
-
         }
-
         return overlayBitmap
     }
+
+
+    /**
+     * Draws a detection box around a detected object on a bitmap.
+     *
+     * @param detection The [Detection] object containing the details of what was detected.
+     * @param originalBitmap The bitmap on which the detection box is to be drawn.
+     * @param screenWidth The width of the screen for scaling the detection box.
+     * @param screenHeight The height of the screen for scaling the detection box.
+     * @return The original bitmap with a detection box drawn on it.
+     */
+    private fun drawDetectionBox(
+        detection: Detection,
+        originalBitmap: Bitmap,
+        screenWidth: Float,
+        screenHeight: Float
+    ): Bitmap {
+        // Prepare a Paint object for drawing
+        val paint = Paint().apply {
+            style = Paint.Style.STROKE
+            strokeWidth = 8f
+            color = getColorForLabel(detection.detectedObjectName)
+        }
+
+        val scaleFactor = min(
+            screenWidth * 1f / detection.tensorImageWidth,
+            screenHeight * 1f / detection.tensorImageHeight
+        )
+
+        // Scaling adaptively depending on DPI of the device
+        val adaptiveScaleFactor: Float = getDeviceDensityValue()
+
+        val scaledBox = RectF(
+            detection.boundingBox.left * adaptiveScaleFactor,
+            detection.boundingBox.top * adaptiveScaleFactor,
+            detection.boundingBox.right * adaptiveScaleFactor,
+            detection.boundingBox.bottom * adaptiveScaleFactor
+        ).also {
+            it.left = it.left.coerceAtLeast(0f)
+            it.top = it.top.coerceAtLeast(0f)
+            it.right = it.right.coerceAtMost(screenWidth)
+            it.bottom = it.bottom.coerceAtMost(screenHeight)
+        }
+
+        // Clone the original bitmap to draw onto
+        val canvas = Canvas(originalBitmap)
+
+        // Draw the rectangle on the canvas
+        canvas.drawRect(scaledBox, paint)
+
+        val text = "${detection.detectedObjectName} ${(detection.confidenceScore * 100).toInt()}%"
+        val textPaint = Paint().apply {
+            color = paint.color
+            textSize = 20f
+        }
+
+        // Draw the text on the canvas
+        canvas.drawText(text, scaledBox.left, scaledBox.top - 10, textPaint)
+
+        return originalBitmap
+    }
+
+    /**
+     * Retrieves the device's screen density factor as a float value.
+     * This value is used to scale pixel dimensions to match the current screen density.
+     *
+     * @return A float representing the density factor of the display (e.g., 0.75 for low, 1.0 for medium, etc.).
+     * The default return value is 1.0f, corresponding to the baseline screen density (mdpi).
+     */
+    private fun getDeviceDensityValue(): Float {
+        return when (Resources.getSystem().displayMetrics.densityDpi) {
+            DisplayMetrics.DENSITY_LOW -> 0.75f
+            DisplayMetrics.DENSITY_MEDIUM -> 1.0f
+            DisplayMetrics.DENSITY_HIGH -> 1.5f
+            DisplayMetrics.DENSITY_XHIGH -> 2.0f
+            DisplayMetrics.DENSITY_XXHIGH -> 3.0f
+            DisplayMetrics.DENSITY_XXXHIGH -> 4.0f
+            else -> 1.0f
+        }
+    }
+
+    private val labelColorMap = mutableMapOf<String, Int>()
+
+    /**
+     * Gets a color associated with a particular label. If a color is not already assigned,
+     * it generates a random color and associates it with the label for consistent coloring.
+     *
+     * @param label The label for which a color is required.
+     * @return The color associated with the given label.
+     */
+    private fun getColorForLabel(label: String): Int {
+        return labelColorMap.getOrPut(label) {
+            // Generates a random color for the label if it doesn't exist in the map.
+            Random.nextInt()
+        }
+    }
+
 }
