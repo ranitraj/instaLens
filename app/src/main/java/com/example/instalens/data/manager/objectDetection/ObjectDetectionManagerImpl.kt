@@ -2,6 +2,7 @@ package com.example.instalens.data.manager.objectDetection
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.Surface
 import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
 import com.example.instalens.domain.model.Detection
@@ -9,6 +10,7 @@ import com.example.instalens.utils.Constants
 import org.tensorflow.lite.gpu.CompatibilityList
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.Rot90Op
 import org.tensorflow.lite.task.core.BaseOptions
 import org.tensorflow.lite.task.core.vision.ImageProcessingOptions
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
@@ -36,16 +38,23 @@ class ObjectDetectionManagerImpl @Inject constructor(
             initializeDetector(confidenceThreshold)
         }
 
-        val tfLiteImageProcessingOptions = initializeImageProcessingOptions(rotation)
-        val tfLiteImageProcessor: ImageProcessor = ImageProcessor.Builder().build()
-        val tensorImage: TensorImage = tfLiteImageProcessor.process(
+        Log.e("RRG", "CapturedImage Width = ${bitmap.width} || CapturedImage Height = ${bitmap.height} || Rotation = $rotation")
+
+        val imageProcessor =
+            ImageProcessor.Builder()
+                .add(Rot90Op(-rotation / 90))
+                .build()
+
+        val tensorImage: TensorImage = imageProcessor.process(
             TensorImage.fromBitmap(bitmap)
         )
 
+        Log.e("RRG", "tensorImage Width = ${tensorImage.width} || tensorImage Height = ${tensorImage.height}")
+
+
         // Obtain Results
         val detectionResults = detector?.detect(
-            tensorImage,
-            tfLiteImageProcessingOptions
+            tensorImage
         )
 
         // Map detected objects to 'Detection' and filter by confidence threshold

@@ -35,6 +35,7 @@ import com.example.instalens.R
 import com.example.instalens.data.manager.objectDetection.ObjectDetectionManagerImpl
 import com.example.instalens.domain.model.Detection
 import com.example.instalens.presentation.common.ImageButton
+import com.example.instalens.presentation.home.components.CameraOverlay
 import com.example.instalens.presentation.home.components.CameraPreview
 import com.example.instalens.presentation.home.components.ObjectCounter
 import com.example.instalens.presentation.home.components.RequestPermissions
@@ -65,6 +66,10 @@ fun HomeScreen() {
     // State to hold the confidence score updated by Slider
     val confidenceScoreState = remember { mutableFloatStateOf(Constants.INITIAL_CONFIDENCE_SCORE) }
 
+    // Scale factor depending on device
+    var scaleFactorX = 1f
+    var scaleFactorY = 1f
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -91,6 +96,7 @@ fun HomeScreen() {
                     boundingBoxCoordinatesState.clear()
                     detections.forEach { detection ->
                         boundingBoxCoordinatesState.add(detection.boundingBox)
+                        Log.d("RRG", "detections image HEIGHT = ${detection.tensorImageHeight} || WIDTH = ${detection.tensorImageWidth}")
                     }
                 },
                 confidenceScoreState = confidenceScoreState
@@ -123,19 +129,19 @@ fun HomeScreen() {
                 cameraFrameAnalyzer
             )
         }
-
-        // Combined Column for Camera Preview & Bottom UI
+        // Combined Column for Camera Preview, CameraOverlay & Bottom UI
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = colorResource(id = R.color.gray_900)),
         ) {
-            // Camera Preview Column
-            Column(
+            // Camera Preview Column with CameraOverlay
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.8f)
             ) {
+                // Camera Preview
                 CameraPreview(
                     controller =  remember {
                         cameraController
@@ -143,8 +149,24 @@ fun HomeScreen() {
                     modifier = Modifier.fillMaxSize(),
                     onPreviewSizeChanged = { newSize ->
                         previewSizeState.value = newSize
+
+                        Log.d("XXXX", "previewSizeState.value.width = ${previewSizeState.value.width} && previewSizeState.value.height = ${previewSizeState.value.height}")
+
+                        // Get Scale-Factors along X and Y depending on size of camera-preview
+                        val scaleFactors = ImageScalingUtils.getScaleFactors(
+                            newSize.width,
+                            newSize.height
+                        )
+
+                        scaleFactorX = scaleFactors[0]
+                        scaleFactorY = scaleFactors[1]
+
+                        Log.d("XXXX", "scaleFactorX = $scaleFactorX && scaleFactorY = $scaleFactorY")
                     }
                 )
+
+                // Add CameraOverlay here so it overlays on top of CameraPreview
+                CameraOverlay(detections = detections)
             }
 
             // Bottom column with Capture-Image and Threshold Level Slider

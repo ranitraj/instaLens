@@ -8,10 +8,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
+import kotlin.math.roundToInt
 
 /**
  * CameraPreview is a Composable that provides a preview of the camera feed using CameraX's `PreviewView`.
@@ -33,11 +35,6 @@ fun CameraPreview(
     AndroidView(
         factory = {
             PreviewView(it).apply {
-                // Mapping Aspect-Ratio as 4:3
-                this.layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    (ViewGroup.LayoutParams.MATCH_PARENT * (4f/3f)).toInt()
-                )
                 this.controller = controller
                 controller.bindToLifecycle(lifeCycleOwner)
             }

@@ -33,8 +33,7 @@ class CameraFrameAnalyzer @Inject constructor(
             val rotationDegrees = image.imageInfo.rotationDegrees
             val bitmap = image.toBitmap()
 
-            // Obtaining results via Use-Case
-            // TODO: Replace constant confidence score with dynamic value
+            // Obtaining results via objectDetectionManager in Domain Layer
             val objectDetectionResults = objectDetectionManager.detectObjectsInCurrentFrame(
                 bitmap = bitmap,
                 rotationDegrees,
