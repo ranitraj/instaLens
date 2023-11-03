@@ -25,7 +25,7 @@ As Jetpack Compose is relatively new, there was limited documentation and suppor
 - Utilized the latest tutorials, articles, and community forums to find solutions for specific issues related to camera integration with Compose.
 
 #### Challenge 2: Scaling RectF Coordinates
-The RectF coordinates from the TensorFlow Lite model were not scaled to fit different device resolutions, leading to inaccuracies in displaying detected objects.
+The RectF coordinates from the TensorFlow Lite model were not scaled to fit different device resolutions, leading to inaccuracies in drawing bounding boxes around the detected objects.
 
 **Addressed By:**
 - A robust debugging process was established to calculate the size of the camera preview screen, and the size of input and output images.
