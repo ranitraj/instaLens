@@ -1,6 +1,7 @@
 package com.example.instalens.presentation.common
 
 import android.graphics.Paint
+import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.alpha
@@ -20,15 +22,28 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.example.instalens.domain.model.Detection
+import kotlin.math.max
 import kotlin.random.Random
 
 @Composable
 fun DrawDetectionBox(detection: Detection) {
     val paint = rememberUpdatedState(Paint().apply {
         style = Paint.Style.STROKE
-        strokeWidth = 2f
+        strokeWidth = 3f
         color = getColorForLabel(detection.detectedObjectName)
     })
+
+    val scaleFactor = max(
+        LocalContext.current.resources.displayMetrics.widthPixels * 1f / detection.tensorImageWidth,
+        LocalContext.current.resources.displayMetrics.heightPixels * 1f / detection.tensorImageHeight
+    )
+
+    val scaledBox = RectF(
+        detection.boundingBox.left * scaleFactor,
+        detection.boundingBox.top * scaleFactor,
+        detection.boundingBox.right * scaleFactor,
+        detection.boundingBox.bottom * scaleFactor
+    )
 
     val androidColor = android.graphics.Color.argb(
         (paint.value.color.alpha * 255),
@@ -43,19 +58,19 @@ fun DrawDetectionBox(detection: Detection) {
             onDraw = {
                 drawRect(
                     color = Color(paint.value.color),
-                    size = Size(detection.boundingBox.width(), detection.boundingBox.height()),
-                    topLeft = Offset(detection.boundingBox.left, detection.boundingBox.top),
+                    size = Size(scaledBox.width(), scaledBox.height()),
+                    topLeft = Offset(scaledBox.left, scaledBox.top),
                     style = Stroke(paint.value.strokeWidth)
                 )
 
                 val text =
                     "${detection.detectedObjectName} ${(detection.confidenceScore * 100).toInt()}%"
-                val textStyle = TextStyle(color = Color(paint.value.color), fontSize = 14.sp)
+                val textStyle = TextStyle(color = Color(paint.value.color), fontSize = 28.sp)
                 drawIntoCanvas { canvas ->
                     canvas.nativeCanvas.drawText(
                         text,
-                        detection.boundingBox.left,
-                        detection.boundingBox.top,
+                        scaledBox.left,
+                        scaledBox.top,
                         Paint().apply {
                             color = androidColor
                             textSize = textStyle.fontSize.value
