@@ -50,7 +50,7 @@ fun ThresholdLevelSlider(
             Slider(
                 value = sliderValue.value,
                 onValueChange = {
-                    sliderValue.value = it
+                    sliderValue.value = String.format("%.2f", it).toFloat()
                 },
                 onValueChangeFinished = {
                     thresholdValue(sliderValue.value)

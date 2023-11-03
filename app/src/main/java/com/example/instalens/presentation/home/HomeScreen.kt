@@ -62,6 +62,9 @@ fun HomeScreen() {
     // State to hold RectF coordinates
     val boundingBoxCoordinatesState = remember { mutableStateListOf<RectF>() }
 
+    // State to hold the confidence score updated by Slider
+    val confidenceScoreState = remember { mutableFloatStateOf(Constants.INITIAL_CONFIDENCE_SCORE) }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -89,7 +92,8 @@ fun HomeScreen() {
                     detections.forEach { detection ->
                         boundingBoxCoordinatesState.add(detection.boundingBox)
                     }
-                }
+                },
+                confidenceScoreState = confidenceScoreState
             )
         }
 
@@ -189,7 +193,7 @@ fun HomeScreen() {
                 // Threshold Level Slider
                 val sliderValue = remember { mutableFloatStateOf(Constants.INITIAL_CONFIDENCE_SCORE) }
                 ThresholdLevelSlider(sliderValue) { sliderValue ->
-                    // TODO: Pass to VM then to ML model
+                    confidenceScoreState.floatValue = sliderValue
                 }
             }
         }

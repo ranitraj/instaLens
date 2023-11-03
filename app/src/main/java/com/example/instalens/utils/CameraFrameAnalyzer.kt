@@ -1,13 +1,12 @@
 package com.example.instalens.utils
 
-import android.graphics.Bitmap
-import androidx.camera.core.AspectRatio
+import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import androidx.compose.runtime.State
 import com.example.instalens.domain.manager.objectDetection.ObjectDetectionManager
 import com.example.instalens.domain.model.Detection
 import com.example.instalens.domain.usecases.detection.DetectObjectUseCase
-import com.example.instalens.utils.extensions.cropImage
 import javax.inject.Inject
 
 /**
@@ -23,7 +22,8 @@ import javax.inject.Inject
  */
 class CameraFrameAnalyzer @Inject constructor(
     private val objectDetectionManager: ObjectDetectionManager,
-    private val onObjectDetectionResults: (List<Detection>) -> Unit
+    private val onObjectDetectionResults: (List<Detection>) -> Unit,
+    private val confidenceScoreState: State<Float>
 ): ImageAnalysis.Analyzer {
     private var frameSkipCounter = 0
 
@@ -38,7 +38,7 @@ class CameraFrameAnalyzer @Inject constructor(
             val objectDetectionResults = objectDetectionManager.detectObjectsInCurrentFrame(
                 bitmap = bitmap,
                 rotationDegrees,
-                Constants.INITIAL_CONFIDENCE_SCORE
+                confidenceThreshold = confidenceScoreState.value
             )
             onObjectDetectionResults(objectDetectionResults)
         }
