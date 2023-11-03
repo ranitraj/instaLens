@@ -45,21 +45,15 @@ fun DrawDetectionBox(detection: Detection) {
         color = getColorForLabel(detection.detectedObjectName)      // Assigning a color based on the object label
     })
 
-    // Calculate the scale factor based on the screen size and the image size from the detection dat
-    var  scaleFactor = min(
-        screenWidth * 1f / detection.tensorImageWidth,
-        screenHeight * 1f / detection.tensorImageHeight
-    )
-
-    // Modified scale factor to best suit results (Brute-force)
-    scaleFactor *= 1.5f
+    val xScale = screenWidth / detection.tensorImageWidth
+    val yScale = screenHeight / detection.tensorImageHeight
 
     // Scale the bounding box from the detection to match the display dimensions
     val scaledBox = RectF(
-        detection.boundingBox.left * scaleFactor,
-        detection.boundingBox.top * scaleFactor,
-        detection.boundingBox.right * scaleFactor,
-        detection.boundingBox.bottom * scaleFactor
+        detection.boundingBox.left * xScale,
+        detection.boundingBox.top * yScale,
+        detection.boundingBox.right * xScale,
+        detection.boundingBox.bottom * yScale
     ).also {
         // Ensure the bounding box doesn't go outside of the screen dimensions
         it.left = it.left.coerceAtLeast(0f)
