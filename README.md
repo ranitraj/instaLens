@@ -15,22 +15,35 @@
 - It is assumed that the user's device has a camera that is compatible with the CameraX API.
 - The user has basic understanding of how to operate an Android application.
 - The device has sufficient storage to save snapshots taken during object detection.
+- For generating bounding boxes, selected a scale-factor of 1.5 as it gave best results. Unfortunately, same failed when combining the canvas with original bitmap for saving into device.
 
 ### Challenges Faced
 #### Challenge 1: Limited Support for Jetpack Compose
 As Jetpack Compose is relatively new, there was limited documentation and support available during development. This was particularly challenging when trying to implement advanced camera functionalities.
+As a result, the existing articles and resources did not cover the steps to implement the project at all and everything had to be developed from scratch. 
+Despite all the requirements being met, inaccuracy in scaling the coordinates supplied to draw the bounding boxes from the TFLite model on the CameraX Preview screen and while saving the image are present.
+However, I believe this can be addressed by diving deeper into understanding the relation between device screen size, resolution, output-image size and the camera-frame size.
 
 **Addressed By:**
 - Extensive research and experimentation were conducted to understand the nuances of Jetpack Compose.
 - Utilized the latest tutorials, articles, and community forums to find solutions for specific issues related to camera integration with Compose.
 
-#### Challenge 2: Scaling RectF Coordinates
+#### Challenge 2: Scaling the bounding boxes over the detected objects in real-time
 The RectF coordinates from the TensorFlow Lite model were not scaled to fit different device resolutions, leading to inaccuracies in drawing bounding boxes around the detected objects.
 
 **Addressed By:**
 - A robust debugging process was established to calculate the size of the camera preview screen, and the size of input and output images.
-- Implemented a dynamic scaling factor that adjusts the coordinates based on the device's screen resolution.
 - Although significant improvements were made, a 100% accuracy in scaling across all devices could not be achieved due to the vast number of screen sizes and resolutions.
+
+#### Challenge 3: Scaling the bounding boxes over the detected objects when saving into device
+The RectF coordinates from the TensorFlow Lite model were not scaled to fit different device resolutions, leading to inaccuracies in drawing bounding boxes around the detected objects. 
+However, the same scaling technique applied to address Challenge-2 did not work. So, a completely new logic had to be developed.
+
+**Addressed By:**
+- A robust debugging process was established to calculate the size of the camera preview screen, and the size of input and output images.
+- Implemented a dynamic scaling factor that adjusts the coordinates based on the device's screen resolution.
+- Unfortunately, the boxes still do not surround the detected objects when saved. However, significant improvement was seen after applying a dynamic scaling factor.
+
 
 # InstaLens: Real-Time Object Detection Android App
 
