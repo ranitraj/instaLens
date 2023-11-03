@@ -1,5 +1,7 @@
 package com.example.instalens.utils
 
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -30,13 +32,27 @@ class CameraFrameAnalyzer @Inject constructor(
     override fun analyze(image: ImageProxy) {
         // Analyze only 1 frame every second
         if (frameSkipCounter % 60 == 0) {
-            val rotationDegrees = image.imageInfo.rotationDegrees
-            val bitmap = image.toBitmap()
+            // Rotating the image by transforming it via Matrix using rotationDegrees
+            val rotatedImageMatrix: Matrix =
+                Matrix().apply {
+                    postRotate(image.imageInfo.rotationDegrees.toFloat())
+                }
+
+            // Creating a new Bitmap via createBitmap using 'rotatedImageMatrix'
+            val rotatedBitmap: Bitmap = Bitmap.createBitmap(
+                image.toBitmap(),
+                0,
+                0,
+                image.width,
+                image.height,
+                rotatedImageMatrix,
+                true
+            )
 
             // Obtaining results via objectDetectionManager in Domain Layer
             val objectDetectionResults = objectDetectionManager.detectObjectsInCurrentFrame(
-                bitmap = bitmap,
-                rotationDegrees,
+                bitmap = rotatedBitmap,
+                image.imageInfo.rotationDegrees,
                 confidenceThreshold = confidenceScoreState.value
             )
             onObjectDetectionResults(objectDetectionResults)

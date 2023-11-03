@@ -42,7 +42,7 @@ class ObjectDetectionManagerImpl @Inject constructor(
 
         val imageProcessor =
             ImageProcessor.Builder()
-                .add(Rot90Op(-rotation / 90))
+                //.add(Rot90Op(-rotation / 90))
                 .build()
 
         val tensorImage: TensorImage = imageProcessor.process(
