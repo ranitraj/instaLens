@@ -28,8 +28,8 @@ class CameraFrameAnalyzer @Inject constructor(
     private var frameSkipCounter = 0
 
     override fun analyze(image: ImageProxy) {
-        // Analyze only 1 frame every 2-seconds
-        if (frameSkipCounter % 120 == 0) {
+        // Analyze only 1 frame every second
+        if (frameSkipCounter % 60 == 0) {
             val rotationDegrees = image.imageInfo.rotationDegrees
             val bitmap = image.toBitmap()
 
