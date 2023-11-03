@@ -24,7 +24,12 @@ import com.example.instalens.presentation.onboarding.model.Page
 import com.example.instalens.ui.theme.InstaLensTheme
 
 /**
- * Composable function implementing the Layout of the OnBoarding Page
+ * Displays an individual onboarding page for an app's onboarding sequence.
+ * It includes an image, a title, and a description for each page of the onboarding.
+ *
+ * @param page The data object that holds the content for the onboarding page,
+ *             including the image resource ID, title, and description.
+ * @param modifier A [Modifier] to be applied to the Column layout for custom styling and behavior.
  */
 @Composable
 fun OnBoardingPage(

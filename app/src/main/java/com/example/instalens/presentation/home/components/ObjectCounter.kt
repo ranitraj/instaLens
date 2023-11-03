@@ -23,8 +23,10 @@ import com.example.instalens.R
 import com.example.instalens.presentation.utils.Dimens
 
 /**
- * Composable to display the count of objects present in the current frame
- * comprising of an icon and a text field to print the count.
+ * Composable to display a count of objects detected in the current frame, which includes an icon followed by a text field.
+ * This UI component is intended to overlay other content, with a semi-transparent background for better visibility.
+ *
+ * @param objectCount The number of detected objects to display.
  */
 @Composable
 fun ObjectCounter(objectCount: Int) {

@@ -8,6 +8,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.instalens.R
 
+/**
+ * Composable function that creates a secondary styled button with a text label.
+ * This button is styled with less emphasis than the primary button and is used for less prominent actions.
+ *
+ * @param text The text to display on the button, which indicates the action of the button.
+ * @param onClick The callback to be invoked when the button is interacted with by the user.
+ */
 @Composable
 fun SecondaryButton(
     text: String,

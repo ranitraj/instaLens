@@ -11,6 +11,13 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.instalens.R
 import com.example.instalens.presentation.utils.Dimens
 
+/**
+ * Composable function that creates a primary styled button with a text label.
+ * This button follows the app's primary color theme and is intended to stand out as the main action button.
+ *
+ * @param text The text to display on the button, representing the button's action.
+ * @param onClick The callback to be invoked when the button is clicked.
+ */
 @Composable
 fun PrimaryButton(
     text: String,

@@ -16,9 +16,13 @@ import org.tensorflow.lite.task.core.vision.ImageProcessingOptions
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
 import javax.inject.Inject
 
+/**
+ * Manages the detection of objects within images using a TensorFlow Lite model
+ */
 class ObjectDetectionManagerImpl @Inject constructor(
     private val context: Context
 ): ObjectDetectionManager {
+    // Holds the instance of the TensorFlow Lite object detector.
     private var detector: ObjectDetector? = null
 
     /**
@@ -38,19 +42,16 @@ class ObjectDetectionManagerImpl @Inject constructor(
             initializeDetector(confidenceThreshold)
         }
 
-        Log.e("RRG", "CapturedImage Width = ${bitmap.width} || CapturedImage Height = ${bitmap.height} || Rotation = $rotation")
-
+        // Configure image processor for the given rotation.
         val imageProcessor =
             ImageProcessor.Builder()
-                //.add(Rot90Op(-rotation / 90))
+                //.add(Rot90Op(-rotation / 90))     // Nullifying by adding rotation in CameraFrameAnalyzer class
                 .build()
 
+        // Convert the bitmap into a TensorImage for processing.
         val tensorImage: TensorImage = imageProcessor.process(
             TensorImage.fromBitmap(bitmap)
         )
-
-        Log.e("RRG", "tensorImage Width = ${tensorImage.width} || tensorImage Height = ${tensorImage.height}")
-
 
         // Obtain Results
         val detectionResults = detector?.detect(

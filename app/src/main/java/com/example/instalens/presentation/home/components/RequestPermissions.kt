@@ -7,6 +7,13 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
+/**
+ * Composable function that handles the runtime request of necessary permissions.
+ * It requests camera permissions and, conditionally, external storage write permissions for SDK versions <= 29 (Q).
+ *
+ * Permissions are automatically requested when the composable enters the Composition via a `LaunchedEffect`.
+ * The use of `ExperimentalPermissionsApi` indicates that the API used for permission handling is subject to change.
+ */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RequestPermissions() {

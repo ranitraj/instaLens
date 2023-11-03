@@ -26,6 +26,15 @@ import com.example.instalens.presentation.utils.Dimens
 import com.example.instalens.utils.Constants.INITIAL_CONFIDENCE_SCORE
 import kotlin.math.absoluteValue
 
+/**
+ * A composable function that presents a slider used for adjusting a threshold level,
+ * typically for a confidence score or similar metric that ranges from 0 to 1.
+ * The current value of the slider is displayed as a percentage to the user.
+ *
+ * @param sliderValue A [MutableState] holding the current value of the slider, which can be observed and modified.
+ * @param thresholdValue A lambda function that is invoked when the slider value change is completed.
+ *                       It provides the final value of the slider when the user stops interacting with it.
+ */
 @Composable
 fun ThresholdLevelSlider(
     sliderValue: MutableState<Float>,
@@ -53,6 +62,7 @@ fun ThresholdLevelSlider(
                     sliderValue.value = String.format("%.2f", it).toFloat()
                 },
                 onValueChangeFinished = {
+                    // Invoke the provided lambda function with the final value
                     thresholdValue(sliderValue.value)
                 },
                 valueRange = 0f..1f,

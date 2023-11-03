@@ -45,28 +45,31 @@ import com.example.instalens.utils.CameraFrameAnalyzer
 import com.example.instalens.utils.Constants
 import com.example.instalens.utils.ImageScalingUtils
 
-
+/**
+ * The primary screen for the application. It combines camera functionalities,
+ * real-time object detection, and UI elements to interact with the camera and settings.
+ */
 @Composable
 fun HomeScreen() {
     val context = LocalContext.current
     val viewModel: HomeViewModel = hiltViewModel()
 
-    // Request Permissions
+    // Requesting necessary permissions
     RequestPermissions()
 
-    // Collect value emitted by 'isImageSavedStateFlow' when image is captured
+    // Observing the state for whether an image is saved successfully
     val isImageSavedStateFlow by viewModel.isImageSavedStateFlow.collectAsState()
 
-    // State to hold the preview size
+    // State to keep track of the preview size of the camera feed
     val previewSizeState = remember { mutableStateOf(IntSize(0, 0)) }
 
-    // State to hold RectF coordinates
+    // List to hold bounding box coordinates for detected objects
     val boundingBoxCoordinatesState = remember { mutableStateListOf<RectF>() }
 
-    // State to hold the confidence score updated by Slider
+    // State for the confidence score, influenced by the user through a slider
     val confidenceScoreState = remember { mutableFloatStateOf(Constants.INITIAL_CONFIDENCE_SCORE) }
 
-    // Scale factor depending on device
+    // Scale factors to translate coordinates from the detected image to the preview size
     var scaleFactorX = 1f
     var scaleFactorY = 1f
 
@@ -89,38 +92,17 @@ fun HomeScreen() {
                     context = context
                 ),
                 onObjectDetectionResults = {
-                    Log.d("RRG", "onObjectDetectionResults == $detections")
                     detections = it
 
                     // Clear the previous RectFs and add all new ones
                     boundingBoxCoordinatesState.clear()
                     detections.forEach { detection ->
                         boundingBoxCoordinatesState.add(detection.boundingBox)
-                        Log.d("RRG", "detections image HEIGHT = ${detection.tensorImageHeight} || WIDTH = ${detection.tensorImageWidth}")
                     }
                 },
                 confidenceScoreState = confidenceScoreState
             )
         }
-
-
-        // TODO: Remove just for logging
-        try {
-            boundingBoxCoordinatesState.forEach { rect ->
-                val scaledRect = ImageScalingUtils.scaleBoundingBox(
-                    rect,
-                    detections[0].tensorImageWidth,
-                    detections[0].tensorImageHeight,
-                    previewSizeState.value.width,
-                    previewSizeState.value.height
-                )
-
-                Log.d("RRG", "Corresponding RectF coordinates for detection: L = ${scaledRect.left}, T = ${scaledRect.top}, R = ${scaledRect.right}, B = ${scaledRect.bottom}")
-            }
-        } catch (e: IndexOutOfBoundsException) {
-            e.printStackTrace()
-        }
-
 
         // Prepare Camera Controller
         val cameraController = remember {
@@ -129,6 +111,7 @@ fun HomeScreen() {
                 cameraFrameAnalyzer
             )
         }
+
         // Combined Column for Camera Preview, CameraOverlay & Bottom UI
         Column(
             modifier = Modifier
@@ -150,8 +133,6 @@ fun HomeScreen() {
                     onPreviewSizeChanged = { newSize ->
                         previewSizeState.value = newSize
 
-                        Log.d("XXXX", "previewSizeState.value.width = ${previewSizeState.value.width} && previewSizeState.value.height = ${previewSizeState.value.height}")
-
                         // Get Scale-Factors along X and Y depending on size of camera-preview
                         val scaleFactors = ImageScalingUtils.getScaleFactors(
                             newSize.width,
@@ -160,8 +141,6 @@ fun HomeScreen() {
 
                         scaleFactorX = scaleFactors[0]
                         scaleFactorY = scaleFactors[1]
-
-                        Log.d("XXXX", "scaleFactorX = $scaleFactorX && scaleFactorY = $scaleFactorY")
                     }
                 )
 

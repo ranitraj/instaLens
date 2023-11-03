@@ -2,7 +2,6 @@ package com.example.instalens.utils
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.compose.runtime.State
@@ -12,15 +11,24 @@ import com.example.instalens.domain.usecases.detection.DetectObjectUseCase
 import javax.inject.Inject
 
 /**
- * A custom analyzer for processing camera frames and detecting objects within them.
+ * This analyzer processes camera frames to detect objects, using a custom implementation that
+ * interfaces with an object detection model provided by [ObjectDetectionManager].
  *
- * This analyzer utilizes the [DetectObjectUseCase] to detect objects within the camera frames.
- * The frames are processed at a rate of 1 frame per-second to optimize performance. Once objects
- * are detected, the results are then communicated back via the [onObjectDetectionResults] callback.
+ * Frames are selectively analyzed at a specified rate (currently once per second assuming a
+ * standard camera frame rate of 60fps), controlled by a frame skip counter to balance performance
+ * and responsiveness. The rotation of each frame is corrected to ensure the detection algorithm
+ * receives images in the correct orientation.
  *
- * @property onObjectDetectionResults Callback to report detected objects from the processed frames.
+ * Detection results, which include the objects found and their confidence scores, are passed back
+ * through the [onObjectDetectionResults] callback, along with any other relevant metadata.
  *
- * @constructor Injects the dependencies required for this analyzer.
+ * @property onObjectDetectionResults A callback function that processes the list of [Detection]
+ * objects returned by the object detection algorithm for each analyzed frame.
+ * @property confidenceScoreState A state holding the threshold for the confidence score,
+ * used to filter results by the object detection manager.
+ *
+ * @constructor Creates an instance of the analyzer with injected dependencies necessary
+ * for object detection operations.
  */
 class CameraFrameAnalyzer @Inject constructor(
     private val objectDetectionManager: ObjectDetectionManager,

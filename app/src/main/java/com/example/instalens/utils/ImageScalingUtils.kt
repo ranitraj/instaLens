@@ -2,6 +2,13 @@ package com.example.instalens.utils
 
 import android.graphics.RectF
 
+/**
+ * Utility object for scaling image dimensions and bounding box coordinates. It provides functions
+ * to calculate scale factors for resizing images to fit specific dimensions while maintaining
+ * aspect ratio, and to adjust bounding box coordinates from a source image size to match a target
+ * preview size, useful in applications involving image processing and object detection where the
+ * output coordinates need to be mapped onto a different display resolution.
+ */
 object ImageScalingUtils {
 
     /**

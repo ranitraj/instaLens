@@ -15,6 +15,16 @@ import androidx.compose.ui.res.colorResource
 import com.example.instalens.R
 import com.example.instalens.presentation.utils.Dimens
 
+/**
+ * A composable function that displays a row of indicators for onboarding screens.
+ * It visually represents the total number of pages and the currently selected page.
+ *
+ * @param modifier A [Modifier] to be applied to the row of indicators.
+ * @param pageCount The total number of onboarding pages.
+ * @param selectedPage The index of the currently selected onboarding page.
+ * @param selectedPageColor The color to be used for the indicator of the selected page.
+ * @param unselectedPageColor The color to be used for the indicators of unselected pages.
+ */
 @Composable
 fun OnBoardingPageIndicator(
     modifier: Modifier = Modifier,

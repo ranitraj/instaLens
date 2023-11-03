@@ -2,6 +2,11 @@ package com.example.instalens.presentation.utils
 
 import androidx.compose.ui.unit.dp
 
+/**
+ * Object containing dimension constants used throughout the UI of the app.
+ * It includes padding sizes for various elements and specific dimensions for UI components
+ * such as buttons, indicators, and icons to maintain a consistent look and feel.
+ */
 object Dimens {
     // Padding
     val Padding4dp = 4.dp

@@ -15,6 +15,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.instalens.R
 import com.example.instalens.presentation.utils.Dimens
 
+/**
+ * Composable function that creates an image button with a given resource and content description.
+ *
+ * @param drawableResourceId The resource ID of the drawable to be used as the image source.
+ * @param contentDescriptionResourceId The resource ID for the content description of the image,
+ *        which is used for accessibility purposes.
+ * @param modifier A [Modifier] for this image button, which can be used to adjust layout
+ *        parameters or add decoration, like padding or clickable effects.
+ */
 @Composable
 fun ImageButton(
     drawableResourceId: Int,
