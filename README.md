@@ -15,7 +15,7 @@
 - It is assumed that the user's device has a camera that is compatible with the CameraX API.
 - The user has basic understanding of how to operate an Android application.
 - The device has sufficient storage to save snapshots taken during object detection.
-- For generating bounding boxes, selected a scale-factor of 1.5 as it gave best results. Unfortunately, same failed when combining the canvas with original bitmap for saving into device.
+- For generating bounding boxes, a dynamic scale-factor along x and y axes depending on view-size and image-size gave best results. Unfortunately, same failed when combining the canvas with original bitmap for saving into device.
 
 ### Challenges Faced
 #### Challenge 1: Limited Support for Jetpack Compose
