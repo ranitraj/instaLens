@@ -76,6 +76,14 @@ InstaLens is an advanced object detection mobile application that leverages the 
       <img src="https://github.com/ranitraj/instaLens/assets/15179100/e1888079-4db2-4bfc-aa6a-050ebdaab961" width="400" />
     </td>
   </tr>
+     <tr>
+    <td>
+      <img src="https://github.com/ranitraj/instaLens/assets/15179100/0c103440-6cd9-47a8-8c86-e4a5f1426e37" width="400" />
+    </td>
+    <td>
+      <img src="https://github.com/ranitraj/instaLens/assets/15179100/9c037741-44b2-487b-ae7c-2c86b8bbab60" width="400" />
+    </td>
+  </tr>
 </table>
 
 
