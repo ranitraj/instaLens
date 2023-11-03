@@ -37,7 +37,7 @@ The RectF coordinates from the TensorFlow Lite model were not scaled to fit diff
 
 #### Challenge 3: Scaling the bounding boxes over the detected objects when saving into device
 The RectF coordinates from the TensorFlow Lite model were not scaled to fit different device resolutions, leading to inaccuracies in drawing bounding boxes around the detected objects. 
-However, the same scaling technique applied to address Challenge-2 did not work. So, a completely new logic had to be developed.
+However, the same scaling technique applied to address Challenge-2 did not work because the saved image was in a different resolution depending on the resolution of camera. So, a completely new logic had to be developed.
 
 **Addressed By:**
 - A robust debugging process was established to calculate the size of the camera preview screen, and the size of input and output images.
