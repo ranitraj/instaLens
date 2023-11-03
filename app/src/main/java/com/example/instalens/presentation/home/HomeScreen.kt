@@ -167,7 +167,8 @@ fun HomeScreen() {
                             // Capture and Saves Photo
                             viewModel.capturePhoto(
                                 context = context,
-                                cameraController = cameraController
+                                cameraController = cameraController,
+                                detections
                             )
 
                             // Show toast of Save State

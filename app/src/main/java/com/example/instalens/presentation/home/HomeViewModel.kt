@@ -3,7 +3,10 @@ package com.example.instalens.presentation.home
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Matrix
+import android.graphics.RectF
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -18,6 +21,7 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.instalens.domain.model.Detection
 import com.example.instalens.domain.usecases.detection.DetectObjectUseCase
 import com.example.instalens.utils.CameraFrameAnalyzer
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +32,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import android.graphics.Paint
 import javax.inject.Inject
 
 @HiltViewModel
@@ -94,7 +99,8 @@ class HomeViewModel @Inject constructor(
      */
     fun capturePhoto(
         context: Context,
-        cameraController: LifecycleCameraController
+        cameraController: LifecycleCameraController,
+        detections: List<Detection>
     ) {
         cameraController.takePicture(
             ContextCompat.getMainExecutor(context),
@@ -110,10 +116,10 @@ class HomeViewModel @Inject constructor(
                             postRotate(image.imageInfo.rotationDegrees.toFloat())
 
                             // Inverting image along X-axis when captured via Front-Camera
-                            val selectedCamera = getSelectedCamera(cameraController)
-                            if (selectedCamera == CameraSelector.DEFAULT_FRONT_CAMERA) {
-                                postScale(-1f, 1f)
-                            }
+//                            val selectedCamera = getSelectedCamera(cameraController)
+//                            if (selectedCamera == CameraSelector.DEFAULT_FRONT_CAMERA) {
+//                                postScale(-1f, 1f)
+//                            }
                     }
 
                     // Creating a new Bitmap via createBitmap using 'rotatedImageMatrix'
@@ -127,10 +133,12 @@ class HomeViewModel @Inject constructor(
                         true
                     )
 
+                    val combinedBitmap = overlayDetectionsOnBitmap(rotatedBitmap, detections)
+
                     // Save the Image-Bitmap to Device
                     saveBitmapToDevice(
                         context = context,
-                        capturedImageBitmap = rotatedBitmap
+                        capturedImageBitmap = combinedBitmap
                     )
                 }
 
@@ -222,4 +230,31 @@ class HomeViewModel @Inject constructor(
         return "IMG_$formattedDate"
     }
 
+
+    fun overlayDetectionsOnBitmap(bitmap: Bitmap, detections: List<Detection>): Bitmap {
+        val overlayBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        val canvas = Canvas(overlayBitmap)
+
+        // Draw the captured image onto the new bitmap
+        canvas.drawBitmap(bitmap, 0f, 0f, null)
+
+        // Draw detections on the canvas (i.e., on top of the captured image)
+        detections.forEach { detection ->
+            val rect = RectF(
+                detection.boundingBox.left,
+                detection.boundingBox.top,
+                detection.boundingBox.right,
+                detection.boundingBox.bottom
+            )
+            val paint = Paint().apply {
+                color = Color.RED
+                style = Paint.Style.STROKE
+                strokeWidth = 4f
+            }
+            canvas.drawRect(rect, paint)
+
+        }
+
+        return overlayBitmap
+    }
 }

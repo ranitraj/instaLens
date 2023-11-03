@@ -95,7 +95,7 @@ fun DrawDetectionBox(detection: Detection) {
                     canvas.nativeCanvas.drawText(
                         text,
                         scaledBox.left,
-                        scaledBox.top,
+                        scaledBox.top - 10,
                         Paint().apply {
                             color = androidColor
                             textSize = pixelSize
